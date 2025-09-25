@@ -51,20 +51,9 @@ void perftdiv(Position& p, unsigned int depth) {
 
 void test_perft() {
 	Position p;
-	Position::set("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", p);
+	Position::set("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", p);
 	std::cout << p;
-
-	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-	auto n = perft<WHITE>(p, );
-	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-	auto diff = end - begin;
-
-	std::cout << "Nodes: " << n << "\n";
-	std::cout << "NPS: "
-		<< int(n * 1000000.0 / std::chrono::duration_cast<std::chrono::microseconds>(diff).count())
-		<< "\n";
-	std::cout << "Time difference = "
-		<< std::chrono::duration_cast<std::chrono::microseconds>(diff).count() << " [microseconds]\n";
+	perftdiv<BLACK>(p, 4);
 }
 
 int main() {
