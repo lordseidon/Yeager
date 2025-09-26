@@ -292,7 +292,7 @@ Move mcts_search_with_config(Position& initial_pos, int iterations, const MCTSCo
 Move mcts_search(Position& initial_pos, int iterations) {
     MCTSConfig default_config;
     default_config.c_puct = 1.414;  // Keep original UCB1 constant
-    default_config.temperature = 2.5; // Deterministic selection (pick best)
+    default_config.temperature = 0.5; // Deterministic selection (pick best)
     default_config.verbose = true;
     default_config.add_noise = false;
     default_config.value_weight = 1.0;
