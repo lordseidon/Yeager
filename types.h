@@ -83,7 +83,7 @@ inline Square& operator+=(Square& s, Direction d) { return s = s + d; }
 inline Square& operator-=(Square& s, Direction d) { return s = s - d; }
 
 enum File : int {
-	AFILE, BFILE, CFILE, DFILE, EFILE, FFILE, GFILE, HFILE
+	A_FILE, B_FILE, C_FILE, D_FILE, E_FILE, F_FILE, G_FILE, H_FILE
 };	
 
 enum Rank : int {
@@ -124,11 +124,11 @@ template<Direction D>
 constexpr Bitboard shift(Bitboard b) {
 	return D == NORTH ? b << 8 : D == SOUTH ? b >> 8
 		: D == NORTH + NORTH ? b << 16 : D == SOUTH + SOUTH ? b >> 16
-		: D == EAST ? (b & ~MASK_FILE[HFILE]) << 1 : D == WEST ? (b & ~MASK_FILE[AFILE]) >> 1
-		: D == NORTH_EAST ? (b & ~MASK_FILE[HFILE]) << 9 
-		: D == NORTH_WEST ? (b & ~MASK_FILE[AFILE]) << 7
-		: D == SOUTH_EAST ? (b & ~MASK_FILE[HFILE]) >> 7 
-		: D == SOUTH_WEST ? (b & ~MASK_FILE[AFILE]) >> 9
+		: D == EAST ? (b & ~MASK_FILE[H_FILE]) << 1 : D == WEST ? (b & ~MASK_FILE[A_FILE]) >> 1
+		: D == NORTH_EAST ? (b & ~MASK_FILE[H_FILE]) << 9 
+		: D == NORTH_WEST ? (b & ~MASK_FILE[A_FILE]) << 7
+		: D == SOUTH_EAST ? (b & ~MASK_FILE[H_FILE]) >> 7 
+		: D == SOUTH_WEST ? (b & ~MASK_FILE[A_FILE]) >> 9
 		: 0;	
 }
 
