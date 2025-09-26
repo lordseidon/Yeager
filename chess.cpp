@@ -3,14 +3,19 @@
 #include <iostream>
 
 int main() {
-    // Initialize a starting chess position (you may need to adjust this
-    // depending on how your Position class is implemented).
+    initialise_all_databases();
+	zobrist::initialise_zobrist_keys();
+
+
     Position pos;  
-    Position::set("1q5k/1b3Qp1/3bN1p1/2p5/1nP1p3/1P2P3/6PP/B5K1 w - - 0 28", pos);
+    Position::set("r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3", pos);
 
-    int iterations = 15000;  // number of MCTS iterations to run
+    MoveList<WHITE> moves(pos);
+    std::cout << "Available moves: " << moves.size() << std::endl;
 
-    std::cout << "Running MCTS with " << iterations << " iterations..." << std::endl;
+    int iterations = 60000;  // number of MCTS iterations to run
+
+    // std::cout << "Running MCTS with " << iterations << " iterations..." << std::endl;
 
     Move bestMove = mcts_search(pos, iterations);
 
