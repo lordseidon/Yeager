@@ -73,9 +73,10 @@ int main() {
     // print_full_tensor_structured(result2.tensor);
 
     MCTSConfig config;
-    config.num_threads = 8;
+    config.num_threads = 64;
     config.batch_size = 256; // Should match your server's preferred batch size
-    config.c_puct = 4;
+    config.c_puct = 8;
+    config.temperature = 0;
     config.verbose = true;
     config.dirichlet_alpha = 0.3;
     config.dirichlet_epsilon = 0.25;
@@ -97,7 +98,7 @@ int main() {
     std::cout << "Starting search from position: " << initial_pos.fen() << std::endl;
 
     // 5. Run the search for a set number of iterations
-    int total_iterations = 10000;
+    int total_iterations = 4500;
     Move best_move = mcts_engine.run_search(initial_pos, total_iterations);
 
     // 6. Output the result

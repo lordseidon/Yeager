@@ -6,10 +6,17 @@
 RemoteEvaluator::RemoteEvaluator(const std::string& server_address, int batch_size)
     : batch_size_(batch_size), stop_thread_(false) {
     
-    auto channel = grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials());
+    grpc::ChannelArguments args;
+    args.SetMaxReceiveMessageSize(100 * 1024 * 1024);  // 100MB
+    args.SetMaxSendMessageSize(100 * 1024 * 1024);     // 100MB
+    
+    auto channel = grpc::CreateCustomChannel(
+        server_address, 
+        grpc::InsecureChannelCredentials(),
+        args
+    );
     stub_ = inference::InferenceService::NewStub(channel);
-
-    // Start the dedicated thread for processing batches
+    
     processing_thread_ = std::thread(&RemoteEvaluator::processing_loop, this);
 }
 
@@ -32,7 +39,7 @@ std::future<EvaluationResult> RemoteEvaluator::queue_request(std::deque<float>&&
     {
         std::unique_lock<std::mutex> lock(queue_mutex_);
         request_queue_.emplace_back(std::move(req));
-        // std::cout << "[CLIENT] Queued request, queue size now: " << request_queue_.size() << std::endl;
+        std::cout << "[CLIENT] Queued request, queue size now: " << request_queue_.size() << std::endl;
     }
     cv_.notify_one();
 
@@ -41,8 +48,8 @@ std::future<EvaluationResult> RemoteEvaluator::queue_request(std::deque<float>&&
 
 // In remote_evaluator.cpp, replace your existing processing_loop with:
 void RemoteEvaluator::processing_loop() {
-    const int MAX_BATCH = 200;  // Keep batches at this size
-    const int MIN_BATCH = 128;   // Minimum before sending
+    const int MAX_BATCH = 256;  // Keep batches at this size
+    const int MIN_BATCH = 256;   // Minimum before sending
     
     while (true) {
         std::deque<InferenceRequest> batch;
@@ -51,7 +58,7 @@ void RemoteEvaluator::processing_loop() {
             std::unique_lock<std::mutex> lock(queue_mutex_);
             
             // Wait for minimum batch or timeout
-            auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(250);
+            auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(50);
             bool timed_out = !cv_.wait_until(lock, deadline, [this] {
                 return request_queue_.size() >= MIN_BATCH || stop_thread_;
             });

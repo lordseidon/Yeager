@@ -13,8 +13,8 @@ class MCTS;
 
 // MCTS Configuration struct for hyperparameters
 struct MCTSConfig {
-    int num_threads = 8;           // Number of search threads to run in parallel
-    int batch_size = 64;           // Batch size for the RemoteEvaluator
+    int num_threads = 128;           // Number of search threads to run in parallel
+    int batch_size = 128;           // Batch size for the RemoteEvaluator
     double c_puct = 4.0;           // PUCT exploration constant
     double temperature = 1.0;      // Temperature for move selection
     double dirichlet_alpha = 0.3;  // Dirichlet noise alpha
