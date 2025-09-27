@@ -138,7 +138,9 @@ Move MCTS::run_search(const Position& initial_pos, int iterations) {
     // Initial evaluation of the root node is required to expand it
     std::deque<float> root_tensor = convert_position_to_tensor(initial_pos);
     std::cout << "[CLIENT] Main thread: Queueing initial root evaluation..." << std::endl;
-    EvaluationResult root_eval = evaluator_->queue_request(std::move(root_tensor)).get();
+    std::future<EvaluationResult> root_future = evaluator_->queue_request(std::move(root_tensor));
+std::this_thread::sleep_for(std::chrono::microseconds(100));
+EvaluationResult root_eval = root_future.get();
     std::cout << "[CLIENT] Main thread: Initial root evaluation received." << std::endl;
 
     { // Lock is not strictly needed for root, but good practice
@@ -191,7 +193,7 @@ void MCTS::search_worker(const Position& root_pos, MCTSNode* root) {
     MCTSNode* node = root;
     
     // Virtual loss to prevent threads from taking same path
-    const int VIRTUAL_LOSS = 4;
+    const int VIRTUAL_LOSS = 8;
     std::deque<MCTSNode*> path;
 
     // 1. SELECTION: Traverse the tree using PUCT with virtual loss
@@ -224,13 +226,20 @@ void MCTS::search_worker(const Position& root_pos, MCTSNode* root) {
         return;
     }
 
-    // 2. EXPANSION & EVALUATION
+    // 2. EXPANSION & EVALUATION    
     std::scoped_lock lock(node->expansion_mutex_);
+
+if (node->children.empty()) {
+    std::deque<float> pos_tensor = convert_position_to_tensor(pos);
     
-    if (node->children.empty()) {
-        std::deque<float> pos_tensor = convert_position_to_tensor(pos);
-        std::future<EvaluationResult> future_eval = evaluator_->queue_request(std::move(pos_tensor));
-        EvaluationResult eval = future_eval.get();
+    // Queue request but don't wait yet
+    std::future<EvaluationResult> future_eval = evaluator_->queue_request(std::move(pos_tensor));
+    
+    // Do other work or let other threads queue requests
+    std::this_thread::sleep_for(std::chrono::microseconds(100)); // Small delay
+    
+    // Now wait for result
+    EvaluationResult eval = future_eval.get();
 
         // Apply softmax to policy
         std::deque<float> softmax_policy(eval.policy.size());
