@@ -3,10 +3,13 @@
 #include "position.h" // Your existing position/move classes
 #include "types.h"
 #include "remote_evaluator.h" // The RemoteEvaluator you created
-#include <vector>
+#include <deque>
 #include <memory>
 #include <atomic>
 #include <mutex>
+
+// Forward declare MCTS class for friend declaration
+class MCTS;
 
 // MCTS Configuration struct for hyperparameters
 struct MCTSConfig {
@@ -28,7 +31,8 @@ public:
     MCTSNode* best_child(double c_puct) const;
 
     // Expands this node, creating children for all legal moves
-    void expand(Position& pos, const std::vector<float>& policy_priors);
+    // Reverted to Position& because move generation is not const-correct.
+    void expand(Position& pos, const std::deque<float>& policy_priors);
 
     // Recursively updates statistics up the tree
     void backpropagate(double value);
@@ -39,12 +43,15 @@ public:
 public:
     Move move;
     MCTSNode* parent;
-    std::vector<std::unique_ptr<MCTSNode>> children;
+    std::deque<std::unique_ptr<MCTSNode>> children;
 
     float policy_prior_;
     std::atomic<int> visits{0};
 
 private:
+    // Grant MCTS class access to private members (like expansion_mutex_)
+    friend class MCTS; 
+
     std::atomic<double> total_action_value_{0.0};
     // Mutex to ensure a node is expanded by only one thread
     std::mutex expansion_mutex_; 
@@ -60,6 +67,14 @@ public:
     Move run_search(const Position& initial_pos, int iterations);
 
 private:
+    struct PendingEvaluation {
+        MCTSNode* node;
+        Position pos;
+        std::future<EvaluationResult> future;
+        std::deque<MCTSNode*> path;
+    };
+    std::deque<PendingEvaluation> pending_evaluations_;
+
     // The main loop that each search thread will execute
     void search_worker(const Position& root_pos, MCTSNode* root);
 

@@ -2,14 +2,14 @@
 
 // --- UTILITY AND PRINTING FUNCTION IMPLEMENTATIONS ---
 
-float get_tensor_value(const std::vector<float>& tensor, int rank, int file, int channel) {
+float get_tensor_value(const std::deque<float>& tensor, int rank, int file, int channel) {
     if (rank < 0 || rank >= 8 || file < 0 || file >= 8 || channel < 0 || channel >= 18) {
         return 0.0f;
     }
     return tensor[(rank * 8 + file) * 18 + channel];
 }
 
-void print_tensor_summary(const std::vector<float>& tensor) {
+void print_tensor_summary(const std::deque<float>& tensor) {
     std::cout << "\nTensor summary (8x8x18):" << std::endl;
     for (int channel = 0; channel < 18; channel++) {
         int count = 0;
@@ -32,7 +32,7 @@ void print_tensor_summary(const std::vector<float>& tensor) {
     }
 }
 
-void print_tensor_channel(const std::vector<float>& tensor, int channel) {
+void print_tensor_channel(const std::deque<float>& tensor, int channel) {
     std::cout << "\nChannel " << channel << " values:" << std::endl;
     std::cout << "   a  b  c  d  e  f  g  h" << std::endl;
     std::cout << "  ------------------------" << std::endl;
@@ -47,7 +47,7 @@ void print_tensor_channel(const std::vector<float>& tensor, int channel) {
     std::cout << "  ------------------------" << std::endl;
 }
 
-void print_tensor_detailed(const std::vector<float>& tensor) {
+void print_tensor_detailed(const std::deque<float>& tensor) {
     std::cout << "\nDetailed Tensor Analysis:" << std::endl;
     const char* piece_names[] = {"Pawn", "Knight", "Bishop", "Rook", "Queen", "King"};
     
@@ -78,7 +78,7 @@ void print_tensor_detailed(const std::vector<float>& tensor) {
     std::cout << "\nPlayer Color (Channel 17): " << color_value << " (1.0 = WHITE, 0.0 = BLACK)" << std::endl;
 }
 
-void print_raw_tensor(const std::vector<float>& tensor) {
+void print_raw_tensor(const std::deque<float>& tensor) {
     std::cout << "\n--- Raw Tensor Data (1152 floats) ---" << std::endl;
     std::cout << "[";
     for (size_t i = 0; i < tensor.size(); ++i) {
@@ -93,7 +93,7 @@ void print_raw_tensor(const std::vector<float>& tensor) {
     std::cout << "]" << std::endl;
 }
 
-void print_full_tensor_structured(const std::vector<float>& tensor) {
+void print_full_tensor_structured(const std::deque<float>& tensor) {
     std::cout << "\n\n--- Full Structured Tensor Dump (8x8x18) ---" << std::endl;
     const char* channel_names[] = {
         "Own Pawns", "Own Knights", "Own Bishops", "Own Rooks", "Own Queens", "Own Kings",

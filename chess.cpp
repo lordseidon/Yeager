@@ -4,12 +4,13 @@
 // #include "position_tensor.h"
 #include "remote_evaluator.h"
 #include "fen_to_tensor.h"
+#include "position_tensor.h"
 
 
 int main() {
     initialise_all_databases();
 	zobrist::initialise_zobrist_keys();
-
+    MoveMappings::initialize_move_mappings();
 
     // Position pos;  
     // Position::set("r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3", pos);
@@ -73,16 +74,16 @@ int main() {
 
     MCTSConfig config;
     config.num_threads = 8;
-    config.batch_size = 64; // Should match your server's preferred batch size
-    config.c_puct = 4.0;
+    config.batch_size = 256; // Should match your server's preferred batch size
+    config.c_puct = 4;
     config.verbose = true;
     config.dirichlet_alpha = 0.3;
     config.dirichlet_epsilon = 0.25;
 
-    // 2. Initialize the Remote Evaluator
+    // 2. Initialize the Remot e Evaluator
     // This connects to your Python gRPC server.
     // Make sure the Python server is running before you start the C++ client.
-    std::string server_address = "localhost:50051";
+    std::string server_address = "localhost:50055";
     auto evaluator = std::make_unique<RemoteEvaluator>(server_address, config.batch_size);
     std::cout << "Connected to evaluation server at " << server_address << std::endl;
 
@@ -91,12 +92,12 @@ int main() {
 
     // 4. Set up the starting position
      Position pos;
-     Position::set("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", pos);
+     Position::set("1r3rk1/p1qb1pb1/2p1p1pp/8/2pP4/1P3BP1/PB2QPKR/7R w - - 0 25", pos);
      Position initial_pos = pos; // Copy for safety
     std::cout << "Starting search from position: " << initial_pos.fen() << std::endl;
 
     // 5. Run the search for a set number of iterations
-    int total_iterations = 1600;
+    int total_iterations = 10000;
     Move best_move = mcts_engine.run_search(initial_pos, total_iterations);
 
     // 6. Output the result

@@ -2,7 +2,7 @@
 #define FEN_TO_TENSOR_H
 
 #include <string>
-#include <vector>
+#include <deque>
 #include <iostream>
 #include <sstream>
 #include <cctype>
@@ -12,7 +12,8 @@
 template <typename IDType>
 struct TensorResult {
     IDType id;
-    std::vector<float> tensor;
+    std::deque
+<float> tensor;
 };
 
 // The fen_to_tensor function is now a template and its full implementation resides in the header.
@@ -20,7 +21,8 @@ struct TensorResult {
 template <typename IDType>
 TensorResult<IDType> fen_to_tensor(const std::string& fen, const IDType& id) {
     // Initialize tensor: 8x8x18 = 1152 elements
-    std::vector<float> tensor(8 * 8 * 18, 0.0f);
+    std::deque
+<float> tensor(8 * 8 * 18, 0.0f);
     
     // Parse FEN string
     std::istringstream fen_stream(fen);
@@ -40,7 +42,7 @@ TensorResult<IDType> fen_to_tensor(const std::string& fen, const IDType& id) {
             rank--;
             file = 0;
         } else if (std::isdigit(c)) {
-            file += (c - '0');
+            file += (c - '0');  
         } else {
             bool piece_is_white = std::isupper(c);
             char piece_char = std::tolower(c);
@@ -109,11 +111,17 @@ TensorResult<IDType> fen_to_tensor(const std::string& fen, const IDType& id) {
 }
 
 // --- UTILITY FUNCTION DECLARATIONS ---
-float get_tensor_value(const std::vector<float>& tensor, int rank, int file, int channel);
-void print_tensor_summary(const std::vector<float>& tensor);
-void print_tensor_channel(const std::vector<float>& tensor, int channel);
-void print_tensor_detailed(const std::vector<float>& tensor);
-void print_full_tensor_structured(const std::vector<float>& tensor);
-void print_raw_tensor(const std::vector<float>& tensor);
+float get_tensor_value(const std::deque
+<float>& tensor, int rank, int file, int channel);
+void print_tensor_summary(const std::deque
+<float>& tensor);
+void print_tensor_channel(const std::deque
+<float>& tensor, int channel);
+void print_tensor_detailed(const std::deque
+<float>& tensor);
+void print_full_tensor_structured(const std::deque
+<float>& tensor);
+void print_raw_tensor(const std::deque
+<float>& tensor);
 
 #endif // FEN_TO_TENSOR_H
