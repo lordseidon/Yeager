@@ -1,6 +1,6 @@
 #pragma once
-
-#include <vector>
+#include <deque>
+#include <deque>
 #include <future>
 #include <memory>
 #include <thread>
@@ -10,14 +10,24 @@
 
 // Struct to hold the result from the neural network
 struct EvaluationResult {
-    std::vector<float> policy;
+    std::deque<float> policy;
     float value;
 };
 
 // Struct for a single request from an MCTS thread
 struct InferenceRequest {
-    std::vector<float> position_tensor; // Flattened 8*8*18
+    std::deque<float> position_tensor;
     std::promise<EvaluationResult> promise;
+    
+    // Delete copy constructor/assignment
+    InferenceRequest(const InferenceRequest&) = delete;
+    InferenceRequest& operator=(const InferenceRequest&) = delete;
+    
+    // Explicitly define move constructor
+    InferenceRequest(InferenceRequest&&) = default;
+    InferenceRequest& operator=(InferenceRequest&&) = default;
+    
+    InferenceRequest() = default;
 };
 
 class RemoteEvaluator {
@@ -26,7 +36,7 @@ public:
     ~RemoteEvaluator();
 
     // MCTS threads call this to get an evaluation
-    std::future<EvaluationResult> queue_request(std::vector<float>&& position_tensor);
+    std::future<EvaluationResult> queue_request(std::deque<float>&& position_tensor);
 
 private:
     void processing_loop(); // The dedicated networking thread runs this
@@ -34,7 +44,7 @@ private:
     const int batch_size_;
     std::unique_ptr<inference::InferenceService::Stub> stub_;
 
-    std::vector<InferenceRequest> request_queue_;
+    std::deque<InferenceRequest> request_queue_;  // Change from deque to deque
     std::mutex queue_mutex_;
     std::condition_variable cv_;
     

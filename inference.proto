@@ -2,34 +2,23 @@ syntax = "proto3";
 
 package inference;
 
-// A single chess position tensor. The 8*8*18 array is flattened.
-// 8 * 8 * 18 = 1152 floats.
 message PositionTensor {
-  repeated float board_state = 1 [packed = true];
+    repeated float board_state = 1;
 }
 
-// The evaluation result for a single position.
-message Evaluation {
-  // The size of this vector is determined by your model's output head.
-  // For your model, this will be a vector of 4480 floats.
-  repeated float policy_logits = 1 [packed = true];
-
-  // The value of the position from the current player's perspective [-1, 1].
-  float value = 2;
-}
-
-// The request from C++ to Python contains a batch of positions.
 message BatchInferenceRequest {
-  repeated PositionTensor positions = 1;
+    repeated PositionTensor positions = 1;
 }
 
-// The response from Python to C++ contains a batch of evaluations.
-// The order MUST match the order of the positions in the request.
+message EvaluationResult {
+    repeated float policy_logits = 1;
+    float value = 2;
+}
+
 message BatchInferenceResponse {
-  repeated Evaluation evaluations = 1;
+    repeated EvaluationResult evaluations = 1;
 }
 
-// The service definition.
 service InferenceService {
-  rpc Evaluate (BatchInferenceRequest) returns (BatchInferenceResponse);
+    rpc Evaluate(BatchInferenceRequest) returns (BatchInferenceResponse);
 }

@@ -61,7 +61,7 @@ namespace MoveMappings {
         std::cout << "Generated " << policy_output_size << " unique moves for the policy map." << std::endl;
     }
     
-    int move_to_policy_index(Move move) {
+    int get_policy_index_for_move(Move move) {
         if (!initialized) initialize_move_mappings();
         
         std::string move_str = move_to_string(move);

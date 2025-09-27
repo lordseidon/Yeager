@@ -18,7 +18,7 @@ namespace MoveMappings {
     void initialize_move_mappings();
     
     // Convert a move to policy network index
-    int move_to_policy_index(Move move);
+    int get_policy_index_for_move(Move move);
 }
 
 // Helper functions for move/square string conversion
