@@ -7,8 +7,8 @@ RemoteEvaluator::RemoteEvaluator(const std::string& server_address, int batch_si
     : batch_size_(batch_size), stop_thread_(false) {
     
     grpc::ChannelArguments args;
-    args.SetMaxReceiveMessageSize(100 * 1024 * 1024);  // 100MB
-    args.SetMaxSendMessageSize(100 * 1024 * 1024);     // 100MB
+    args.SetMaxReceiveMessageSize(512 * 1024 * 1024);  // 100MB
+    args.SetMaxSendMessageSize(512 * 1024 * 1024);     // 100MB
     
     auto channel = grpc::CreateCustomChannel(
         server_address, 
@@ -39,7 +39,7 @@ std::future<EvaluationResult> RemoteEvaluator::queue_request(std::deque<float>&&
     {
         std::unique_lock<std::mutex> lock(queue_mutex_);
         request_queue_.emplace_back(std::move(req));
-        std::cout << "[CLIENT] Queued request, queue size now: " << request_queue_.size() << std::endl;
+        // std::cout << "[CLIENT] Queued request, queue size now: " << request_queue_.size() << std::endl;
     }
     cv_.notify_one();
 
@@ -48,7 +48,7 @@ std::future<EvaluationResult> RemoteEvaluator::queue_request(std::deque<float>&&
 
 // In remote_evaluator.cpp, replace your existing processing_loop with:
 void RemoteEvaluator::processing_loop() {
-    const int MAX_BATCH = 256;  // Keep batches at this size
+    const int MAX_BATCH = 512;  // Keep batches at this size
     const int MIN_BATCH = 256;   // Minimum before sending
     
     while (true) {
@@ -58,7 +58,7 @@ void RemoteEvaluator::processing_loop() {
             std::unique_lock<std::mutex> lock(queue_mutex_);
             
             // Wait for minimum batch or timeout
-            auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(50);
+            auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(10);
             bool timed_out = !cv_.wait_until(lock, deadline, [this] {
                 return request_queue_.size() >= MIN_BATCH || stop_thread_;
             });
@@ -77,8 +77,8 @@ void RemoteEvaluator::processing_loop() {
                 }
                 request_queue_.erase(request_queue_.begin(), request_queue_.begin() + num_to_move);
                 
-                std::cout << "[CLIENT] Sending batch of size " << batch.size() 
-                          << " (queue remaining: " << request_queue_.size() << ")" << std::endl;
+                // std::cout << "[CLIENT] Sending batch of size " << batch.size() 
+                //           << " (queue remaining: " << request_queue_.size() << ")" << std::endl;
             }
         }
         
@@ -96,7 +96,7 @@ void RemoteEvaluator::processing_loop() {
         grpc::ClientContext context;
         
         // Set timeout for the RPC call
-        context.set_deadline(std::chrono::system_clock::now() + std::chrono::seconds(30));
+        context.set_deadline(std::chrono::system_clock::now() + std::chrono::seconds(100));
         
         grpc::Status status = stub_->Evaluate(&context, grpc_request, &grpc_response);
 
