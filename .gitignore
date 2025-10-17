@@ -1,0 +1,17 @@
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore Jupyter notebook checkpoints and notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Ignore pgns directory and game PGNs
+pgns/
+*.pgn
+
+# Ignore grpc directory
+grpc/
+
+# Ignore nohup output
+nohup.out

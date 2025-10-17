@@ -58,13 +58,26 @@ std::string Position::fen() const {
 		if (i > 0) fen << '/';
 	}
 
-	fen << (side_to_play == WHITE ? " w " : " b ")
-		<< (history[game_ply].entry & WHITE_OO_MASK ? "" : "K")
-		<< (history[game_ply].entry & WHITE_OOO_MASK ? "" : "Q")
-		<< (history[game_ply].entry & BLACK_OO_MASK ? "" : "k")
-		<< (history[game_ply].entry & BLACK_OOO_MASK ? "" : "q")
-		<< (history[game_ply].entry & ALL_CASTLING_MASK ? "- " : "")
-		<< (history[game_ply].epsq == NO_SQUARE ? " -" : SQSTR[history[game_ply].epsq]);
+	fen << (side_to_play == WHITE ? " w " : " b ");
+	
+	// Castling rights
+	bool has_castling = false;
+	if (!(history[game_ply].entry & WHITE_OO_MASK)) { fen << "K"; has_castling = true; }
+if (!(history[game_ply].entry & WHITE_OOO_MASK)) { fen << "Q"; has_castling = true; }
+if (!(history[game_ply].entry & BLACK_OO_MASK)) { fen << "k"; has_castling = true; }
+if (!(history[game_ply].entry & BLACK_OOO_MASK)) { fen << "q"; has_castling = true; }
+	if (!has_castling) fen << "-";
+	
+	fen << " ";
+	
+	// En passant square
+	if (history[game_ply].epsq == NO_SQUARE) {
+		fen << "-";
+	} else {
+		fen << SQSTR[history[game_ply].epsq];
+	}
+	
+	fen << " 0 1";  // Halfmove and fullmove (dummy values)
 
 	return fen.str();
 }

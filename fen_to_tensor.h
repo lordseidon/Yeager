@@ -63,7 +63,7 @@ TensorResult<IDType> fen_to_tensor(const std::string& fen, const IDType& id) {
                 
                 if (!is_white_turn) {
                     tensor_rank = 7 - rank;
-                    tensor_file = 7 - file;
+                    // tensor_file = 7 - file;
                 }
                 
                 int channel = (piece_is_white == is_white_turn) ? piece_type_idx : piece_type_idx + 6;

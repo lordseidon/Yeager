@@ -12,55 +12,50 @@
 #include <algorithm>
 #include <thread>
 
-// =================================================================
-// PLACEHOLDER FUNCTIONS - YOU MUST IMPLEMENT THESE
-// =================================================================
-
-// Maps a move object to an integer index for the policy deque (0 to 4479)
-// This is a CRITICAL function you must design based on your move encoding.
 int get_policy_index_for_move(const Move& move) {
     return MoveMappings::get_policy_index_for_move(move);
 }
 
-// Converts your board `Position` object into a flattened 1D deque of floats
-// with the shape (8*8*18 = 1152) that your neural network expects.
 std::deque<float> convert_position_to_tensor(const Position& pos) {
-    // Convert Position to FEN string
-    std::string fen = pos.fen();  // Using the fen() method from Position class
-    
-    // Use a dummy ID since we don't need it for MCTS
+    std::string fen = pos.fen();
     TensorResult<int> result = fen_to_tensor(fen, 0);
-    // std::cout<<"FEN: "<<fen;
-    
     return result.tensor;
 }
+
 // =================================================================
 // MCTSNode IMPLEMENTATION
 // =================================================================
 
 MCTSNode::MCTSNode(Move move, MCTSNode* parent, float policy_prior)
-    : move(move), parent(parent), policy_prior_(policy_prior) {}
+    : move(move), parent(parent), policy_prior_(policy_prior), virtual_loss_(0) {}
 
 double MCTSNode::q_value() const {
     int v = visits.load(std::memory_order_relaxed);
-    if (v == 0) {
+    int vl = virtual_loss_.load(std::memory_order_relaxed);
+    int total_visits = v + vl;
+    if (total_visits == 0) {
         return 0.0;
     }
-    return total_action_value_.load(std::memory_order_relaxed) / v;
+    return total_action_value_.load(std::memory_order_relaxed) / total_visits;
 }
 
 MCTSNode* MCTSNode::best_child(double c_puct) const {
     MCTSNode* best = nullptr;
     double max_score = -std::numeric_limits<double>::max();
-
     int parent_visits = visits.load(std::memory_order_relaxed);
-    
+    int parent_virtual_loss = virtual_loss_.load(std::memory_order_relaxed);
+    int total_parent_visits = parent_visits + parent_virtual_loss;
+
     for (const auto& child : children) {
-        // PUCT formula: Q(s,a) + U(s,a)
         double q = child->q_value();
-        double u = c_puct * child->policy_prior_ * (std::sqrt(parent_visits) / (1 + child->visits.load(std::memory_order_relaxed)));
-        
+        int child_visits = child->visits.load(std::memory_order_relaxed);
+        int child_virtual_loss = child->virtual_loss_.load(std::memory_order_relaxed);
+        int total_child_visits = child_visits + child_virtual_loss;
+
+        double u = c_puct * child->policy_prior_ *
+                   (std::sqrt(total_parent_visits) / (1 + total_child_visits));
         double score = q + u;
+
         if (score > max_score) {
             max_score = score;
             best = child.get();
@@ -69,58 +64,36 @@ MCTSNode* MCTSNode::best_child(double c_puct) const {
     return best;
 }
 
-// The function signature is reverted to take a non-const reference.
 void MCTSNode::expand(Position& pos, const std::deque<float>& policy_priors) {
-    // std::cout << "\n=== EXPAND DEBUG ===" << std::endl;
-    // std::cout << "Turn: " << (pos.turn() == WHITE ? "WHITE" : "BLACK") << std::endl;
-    // std::cout << "Policy priors size: " << policy_priors.size() << std::endl;
-    
     if (pos.turn() == WHITE) {
         MoveList<WHITE> legal_moves(pos);
-        // std::cout << "Legal moves count: " << legal_moves.size() << std::endl;
-        
         for (const auto& m : legal_moves) {
             int policy_index = get_policy_index_for_move(m);
-            float prior = (policy_index != -1 && policy_index < policy_priors.size()) 
-                         ? policy_priors[policy_index] : 0.0f;
-            
-            // std::cout << "Move: " << m 
-            //           << " -> Index: " << policy_index 
-            //           << " -> Prior: " << prior << std::endl;
-            
+            float prior = (policy_index != -1 && policy_index < policy_priors.size())
+                              ? policy_priors[policy_index]
+                              : 0.0f;
             children.push_back(std::make_unique<MCTSNode>(m, this, prior));
         }
     } else {
         MoveList<BLACK> legal_moves(pos);
-        // std::cout << "Legal moves count: " << legal_moves.size() << std::endl;
-        
         for (const auto& m : legal_moves) {
             int policy_index = get_policy_index_for_move(m);
-            float prior = (policy_index != -1 && policy_index < policy_priors.size()) 
-                         ? policy_priors[policy_index] : 0.0f;
-            
-            // std::cout << "Move: " << m 
-            //           << " -> Index: " << policy_index 
-            //           << " -> Prior: " << prior << std::endl;
-            
+            float prior = (policy_index != -1 && policy_index < policy_priors.size())
+                              ? policy_priors[policy_index]
+                              : 0.0f;
             children.push_back(std::make_unique<MCTSNode>(m, this, prior));
         }
     }
-    
-    // std::cout << "Total children created: " << children.size() << std::endl;
-    // std::cout << "==================\n" << std::endl;
 }
 
 void MCTSNode::backpropagate(double value) {
     MCTSNode* node = this;
     while (node != nullptr) {
         node->visits.fetch_add(1, std::memory_order_relaxed);
-        
-        // Correctly perform an atomic add on a double using a compare-exchange loop.
         double current_value = node->total_action_value_.load(std::memory_order_relaxed);
-        while (!node->total_action_value_.compare_exchange_weak(current_value, current_value + value, std::memory_order_relaxed));
-
-        value = -value; // The value is from the perspective of the other player
+        while (!node->total_action_value_.compare_exchange_weak(
+            current_value, current_value + value, std::memory_order_relaxed))
+            ;
         node = node->parent;
     }
 }
@@ -132,173 +105,211 @@ void MCTSNode::backpropagate(double value) {
 MCTS::MCTS(MCTSConfig config, std::unique_ptr<RemoteEvaluator> evaluator)
     : config_(std::move(config)), evaluator_(std::move(evaluator)) {}
 
-Move MCTS::run_search(const Position& initial_pos, int iterations) {
+void MCTS::clear_evaluator_state() {
+    if (evaluator_) {
+        std::cout << "[MCTS] Clearing evaluator state..." << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+}
+
+void MCTS::set_dirichlet_alpha(double alpha) {
+    config_.dirichlet_alpha = alpha;
+}
+
+
+Move MCTS::run_search(const Position& initial_pos, int iterations, bool clear_after_search) {
     MCTSNode root(Move(), nullptr, 1.0f);
 
-    // Initial evaluation of the root node is required to expand it
+    // std::cout << "\n[MCTS] Starting fresh search for position: " << initial_pos.fen() << std::endl;
+    // std::cout << "[MCTS] Turn: " << (initial_pos.turn() == WHITE ? "WHITE" : "BLACK") << std::endl;
+
     std::deque<float> root_tensor = convert_position_to_tensor(initial_pos);
-    std::cout << "[CLIENT] Main thread: Queueing initial root evaluation..." << std::endl;
+    // std::cout << "[MCTS] Evaluating root position..." << std::endl;
     std::future<EvaluationResult> root_future = evaluator_->queue_request(std::move(root_tensor));
-std::this_thread::sleep_for(std::chrono::microseconds(100));
-EvaluationResult root_eval = root_future.get();
-    std::cout << "[CLIENT] Main thread: Initial root evaluation received." << std::endl;
+    EvaluationResult root_eval = root_future.get();
+    // std::cout << "[MCTS] Root evaluation complete. Value: " << root_eval.value << std::endl;
 
-    { // Lock is not strictly needed for root, but good practice
+    {
         std::scoped_lock lock(root.expansion_mutex_);
-        Position pos_copy = initial_pos; 
-        
-        // Apply softmax to root evaluation
-        std::deque<float> softmax_policy(root_eval.policy.size());
-        float max_val = *std::max_element(root_eval.policy.begin(), root_eval.policy.end());
-        float sum = 0.0f;
-        for (size_t i = 0; i < root_eval.policy.size(); i++) {
-            softmax_policy[i] = std::exp(root_eval.policy[i] - max_val);
-            sum += softmax_policy[i];
-        }
-        for (size_t i = 0; i < root_eval.policy.size(); i++) {
-            softmax_policy[i] /= sum;
-        }
-        root.expand(pos_copy, softmax_policy);
+        Position pos_copy = initial_pos;
+        root.expand(pos_copy, root_eval.policy);
     }
-    
-    // Backpropagate root value directly (no flip needed for root)
+
     root.backpropagate(root_eval.value);
-
     add_dirichlet_noise(root);
+    // std::cout << "[MCTS] Root expanded with " << root.children.size() << " children" << std::endl;
 
-    // Launch worker threads
     std::vector<std::thread> threads;
     threads.reserve(config_.num_threads);
-    int iterations_per_thread = iterations / config_.num_threads;
+    std::atomic<int> iterations_remaining(iterations);
 
     for (int i = 0; i < config_.num_threads; ++i) {
-        threads.emplace_back([this, iterations_per_thread, &initial_pos, &root]() {
-            for (int j = 0; j < iterations_per_thread; ++j) {
+        threads.emplace_back([this, &initial_pos, &root, &iterations_remaining]() {
+            while (true) {
+                int remaining = iterations_remaining.fetch_sub(1, std::memory_order_relaxed);
+                if (remaining <= 0) break;
                 this->search_worker(initial_pos, &root);
             }
         });
     }
 
-    // Wait for all threads to finish
     for (auto& t : threads) {
         t.join();
     }
 
-    return select_best_move(root);
+    // std::cout << "[MCTS] Search complete. Root visits: " << root.visits.load() << std::endl;
+    Move best_move = select_best_move(root);
+
+    if (clear_after_search) {
+        clear_evaluator_state();
+        // std::cout << "[MCTS] Evaluator state cleared for next search" << std::endl;
+    }
+
+    return best_move;
 }
 
 void MCTS::search_worker(const Position& root_pos, MCTSNode* root) {
-    static std::atomic<int> iteration_count{0};
+    bool turn_ = root_pos.turn();
+    bool root_turn = root_pos.turn();
     Position pos = root_pos;
     MCTSNode* node = root;
-    
-    // Virtual loss to prevent threads from taking same path
-    const int VIRTUAL_LOSS = 8;
     std::deque<MCTSNode*> path;
 
-    // 1. SELECTION: Traverse the tree using PUCT with virtual loss
     while (!node->children.empty()) {
-        node = node->best_child(config_.c_puct);
+        node->virtual_loss_.fetch_add(1, std::memory_order_relaxed);
         path.push_back(node);
-        
-        // Apply virtual loss to make this node temporarily less attractive
-        node->visits.fetch_add(VIRTUAL_LOSS, std::memory_order_relaxed);
-        
-        if (pos.turn() == WHITE) pos.play<WHITE>(node->move);
-        else pos.play<BLACK>(node->move);
+        node = node->best_child(config_.c_puct);
+
+        if (!node) {
+            for (auto* path_node : path) {
+                path_node->virtual_loss_.fetch_sub(1, std::memory_order_relaxed);
+            }
+            return;
+        }
+
+        if (pos.turn() == WHITE)
+            pos.play<WHITE>(node->move);
+        else
+            pos.play<BLACK>(node->move);
     }
 
-    // Check for a terminal game state
-    if (is_checkmate(pos) || is_stalemate(pos)) {
-        double result = (is_checkmate(pos)) ? -1.0 : 0.0;
-        
-        // Remove virtual loss before backpropagation
-        for (auto n : path) {
-            n->visits.fetch_sub(VIRTUAL_LOSS, std::memory_order_relaxed);
-        }
-        
-        node->backpropagate(result);
-        
-        int count = iteration_count.fetch_add(1);
-        if (count % 500 == 0) {
-            std::cout << "Completed iterations: " << count << std::endl;
-        }
-        return;
+    node->virtual_loss_.fetch_add(1, std::memory_order_relaxed);
+    path.push_back(node);
+
+    bool should_expand = false;
+    {
+        std::scoped_lock lock(node->expansion_mutex_);
+        should_expand = node->children.empty();
     }
 
-    // 2. EXPANSION & EVALUATION    
-    std::scoped_lock lock(node->expansion_mutex_);
+    if (should_expand) {
+        std::deque<float> pos_tensor = convert_position_to_tensor(pos);
+        std::future<EvaluationResult> future_eval = evaluator_->queue_request(std::move(pos_tensor));
+        std::this_thread::sleep_for(std::chrono::microseconds(100));
+        EvaluationResult eval = future_eval.get();
 
-if (node->children.empty()) {
-    std::deque<float> pos_tensor = convert_position_to_tensor(pos);
-    
-    // Queue request but don't wait yet
-    std::future<EvaluationResult> future_eval = evaluator_->queue_request(std::move(pos_tensor));
-    
-    // Do other work or let other threads queue requests
-    std::this_thread::sleep_for(std::chrono::microseconds(100)); // Small delay
-    
-    // Now wait for result
-    EvaluationResult eval = future_eval.get();
+        {
+            std::scoped_lock lock(node->expansion_mutex_);
+            if (node->children.empty()) {
+                node->expand(pos, eval.policy);
+            }
+        }
 
-        // Apply softmax to policy
-        std::deque<float> softmax_policy(eval.policy.size());
-        float max_val = *std::max_element(eval.policy.begin(), eval.policy.end());
-        float sum = 0.0f;
-        for (size_t i = 0; i < eval.policy.size(); i++) {
-            softmax_policy[i] = std::exp(eval.policy[i] - max_val);
-            sum += softmax_policy[i];
-        }
-        for (size_t i = 0; i < eval.policy.size(); i++) {
-            softmax_policy[i] /= sum;
-        }
-        
-        node->expand(pos, softmax_policy);
-        
-        // Remove virtual loss before backpropagation
-        for (auto n : path) {
-            n->visits.fetch_sub(VIRTUAL_LOSS, std::memory_order_relaxed);
-        }
-        
-        // Flip value based on perspective
-        double value = (pos.turn() == WHITE) ? eval.value : -eval.value;
+        double value = eval.value;
+        if (pos.turn() != root_turn) value = -value;
+        if (is_checkmate(pos))
+            value = (pos.turn() == root_turn) ? -1.0 : 1.0;
+        else if (is_stalemate(pos))
+            value = 0.0;
+
         node->backpropagate(value);
-    } else {
-        // Another thread already expanded this node, just remove virtual loss
-        for (auto n : path) {
-            n->visits.fetch_sub(VIRTUAL_LOSS, std::memory_order_relaxed);
+
+        for (auto* path_node : path) {
+            path_node->virtual_loss_.fetch_sub(1, std::memory_order_relaxed);
         }
-    }
-    
-    int count = iteration_count.fetch_add(1);
-    if (count % 500 == 0) {
-        std::cout << "Completed iterations: " << count << std::endl;
+    } else {
+        for (auto* path_node : path) {
+            path_node->virtual_loss_.fetch_sub(1, std::memory_order_relaxed);
+        }
     }
 }
 
-
 Move MCTS::select_best_move(const MCTSNode& root) const {
-    if (root.children.empty()) return Move(); // Should not happen in a real search
+    if (root.children.empty()) return Move();
 
-    MCTSNode* best_move_node = nullptr;
-    int max_visits = -1;
+    int total_visits = 0;
+    for (const auto& child : root.children) {
+        total_visits += child->visits.load(std::memory_order_relaxed);
+    }
 
-    // In tournament play or late in the game, you'd pick the move with the most visits (temp=0).
-    // For training, you can sample from a distribution based on visit counts.
+    if (config_.verbose) {
+        std::cout << "\n=== Move Selection (Temperature=" << std::fixed << std::setprecision(2)
+                  << config_.temperature << ") ===" << std::endl;
+    }
+
+    std::vector<double> visit_counts;
+    std::vector<MCTSNode*> move_nodes;
+
     for (const auto& child : root.children) {
         int child_visits = child->visits.load(std::memory_order_relaxed);
-        if (child_visits > max_visits) {
-            max_visits = child_visits;
-            best_move_node = child.get();
-        }
+        visit_counts.push_back(static_cast<double>(child_visits));
+        move_nodes.push_back(child.get());
+
         if (config_.verbose) {
-            std::cout << "Move: " << child->move 
-                      << " | Visits: " << child_visits
-                      << " | Win Rate: " << std::fixed << std::setprecision(4) << child->q_value()
+            std::cout << "Move: " << child->move << " | Visits: " << child_visits
+                      << " | Q-value: " << std::fixed << std::setprecision(4) << child->q_value()
                       << std::endl;
         }
     }
-    return best_move_node ? best_move_node->move : Move();
+
+    std::vector<double> probabilities = apply_temperature(visit_counts, config_.temperature);
+    MCTSNode* selected_node = sample_from_distribution(move_nodes, probabilities);
+    if (config_.verbose) {
+    std::cout << "\n[MCTS] Root visits: " << root.visits.load(std::memory_order_relaxed)
+              << " | Sum of child visits: " << total_visits
+              << " | Selected move: " << (selected_node ? selected_node->move : Move()) << std::endl;
+    }
+
+    return selected_node ? selected_node->move : Move();
+}
+
+std::vector<double> MCTS::apply_temperature(const std::vector<double>& visit_counts,
+                                            double temperature) const {
+    std::vector<double> probabilities;
+
+    if (temperature < 1e-6) {
+        double max_visits = *std::max_element(visit_counts.begin(), visit_counts.end());
+        for (double count : visit_counts) {
+            probabilities.push_back(count == max_visits ? 1.0 : 0.0);
+        }
+        double sum = std::accumulate(probabilities.begin(), probabilities.end(), 0.0);
+        if (sum > 0) {
+            for (auto& p : probabilities) p /= sum;
+        }
+    } else {
+        double max_count = *std::max_element(visit_counts.begin(), visit_counts.end());
+        double sum = 0.0;
+        for (double count : visit_counts) {
+            double scaled = std::exp((count - max_count) / temperature);
+            probabilities.push_back(scaled);
+            sum += scaled;
+        }
+        if (sum > 0) {
+            for (auto& p : probabilities) p /= sum;
+        }
+    }
+
+    return probabilities;
+}
+
+MCTSNode* MCTS::sample_from_distribution(const std::vector<MCTSNode*>& nodes,
+                                         const std::vector<double>& probabilities) const {
+    if (nodes.empty()) return nullptr;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::discrete_distribution<int> dist(probabilities.begin(), probabilities.end());
+    int selected_index = dist(gen);
+    return nodes[selected_index];
 }
 
 void MCTS::add_dirichlet_noise(MCTSNode& root) {
@@ -306,10 +317,9 @@ void MCTS::add_dirichlet_noise(MCTSNode& root) {
 
     std::deque<double> noise;
     std::random_device rd;
-    // Corrected the typo from mt1937 to mt19937.
     std::mt19937 gen(rd());
     std::gamma_distribution<double> gamma(config_.dirichlet_alpha, 1.0);
-    
+
     double noise_sum = 0.0;
     for (size_t i = 0; i < root.children.size(); ++i) {
         double n = gamma(gen);
@@ -317,10 +327,11 @@ void MCTS::add_dirichlet_noise(MCTSNode& root) {
         noise_sum += n;
     }
 
-    if (noise_sum < 1e-6) return; // Avoid division by zero
-    
+    if (noise_sum < 1e-6) return;
+
     for (size_t i = 0; i < root.children.size(); ++i) {
-        root.children[i]->policy_prior_ = (1.0 - config_.dirichlet_epsilon) * root.children[i]->policy_prior_ +
-                                            config_.dirichlet_epsilon * (noise[i] / noise_sum);
+        root.children[i]->policy_prior_ =
+            (1.0 - config_.dirichlet_epsilon) * root.children[i]->policy_prior_ +
+            config_.dirichlet_epsilon * (noise[i] / noise_sum);
     }
 }
