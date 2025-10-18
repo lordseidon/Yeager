@@ -16,9 +16,13 @@ int get_policy_index_for_move(const Move& move) {
     return MoveMappings::get_policy_index_for_move(move);
 }
 
-std::deque<float> convert_position_to_tensor(const Position& pos) {
-    std::string fen = pos.fen();
-    TensorResult<int> result = fen_to_tensor(fen, 0);
+std::deque<float> convert_position_to_tensor(const Position& pos, const std::deque<std::string>& fen_history) {
+    // Create history of 8 FENs (7 previous + current)
+    std::deque<std::string> full_history = fen_history;
+    full_history.push_back(pos.fen()); // Add current position
+    
+    // Use the new history-aware function
+    TensorResult<int> result = fen_history_to_tensor(full_history, 0);
     return result.tensor;
 }
 
@@ -38,7 +42,7 @@ double MCTSNode::q_value() const {
     }
     return total_action_value_.load(std::memory_order_relaxed) / total_visits;
 }
-
+ 
 MCTSNode* MCTSNode::best_child(double c_puct) const {
     MCTSNode* best = nullptr;
     double max_score = -std::numeric_limits<double>::max();
@@ -118,12 +122,17 @@ void MCTS::set_dirichlet_alpha(double alpha) {
 
 
 Move MCTS::run_search(const Position& initial_pos, int iterations, bool clear_after_search) {
+    return run_search(initial_pos, iterations, clear_after_search, {});
+}
+
+Move MCTS::run_search(const Position& initial_pos, int iterations, bool clear_after_search, const std::deque<std::string>& position_history) {
     MCTSNode root(Move(), nullptr, 1.0f);
+    root.fen_history = position_history; // Initialize root with game history
 
     // std::cout << "\n[MCTS] Starting fresh search for position: " << initial_pos.fen() << std::endl;
     // std::cout << "[MCTS] Turn: " << (initial_pos.turn() == WHITE ? "WHITE" : "BLACK") << std::endl;
 
-    std::deque<float> root_tensor = convert_position_to_tensor(initial_pos);
+    std::deque<float> root_tensor = convert_position_to_tensor(initial_pos, position_history);
     // std::cout << "[MCTS] Evaluating root position..." << std::endl;
     std::future<EvaluationResult> root_future = evaluator_->queue_request(std::move(root_tensor));
     EvaluationResult root_eval = root_future.get();
@@ -174,6 +183,7 @@ void MCTS::search_worker(const Position& root_pos, MCTSNode* root) {
     Position pos = root_pos;
     MCTSNode* node = root;
     std::deque<MCTSNode*> path;
+    std::deque<std::string> current_fen_history = root->fen_history; // Start with root's history
 
     while (!node->children.empty()) {
         node->virtual_loss_.fetch_add(1, std::memory_order_relaxed);
@@ -187,10 +197,19 @@ void MCTS::search_worker(const Position& root_pos, MCTSNode* root) {
             return;
         }
 
+        // Before making the move, save the current position to history
+        std::string current_fen = pos.fen();
+        
         if (pos.turn() == WHITE)
             pos.play<WHITE>(node->move);
         else
             pos.play<BLACK>(node->move);
+        
+        // Update FEN history for this path
+        current_fen_history.push_back(current_fen);
+        if (current_fen_history.size() > 7) {
+            current_fen_history.pop_front(); // Keep only last 7
+        }
     }
 
     node->virtual_loss_.fetch_add(1, std::memory_order_relaxed);
@@ -203,7 +222,7 @@ void MCTS::search_worker(const Position& root_pos, MCTSNode* root) {
     }
 
     if (should_expand) {
-        std::deque<float> pos_tensor = convert_position_to_tensor(pos);
+        std::deque<float> pos_tensor = convert_position_to_tensor(pos, current_fen_history);
         std::future<EvaluationResult> future_eval = evaluator_->queue_request(std::move(pos_tensor));
         std::this_thread::sleep_for(std::chrono::microseconds(100));
         EvaluationResult eval = future_eval.get();
@@ -211,6 +230,7 @@ void MCTS::search_worker(const Position& root_pos, MCTSNode* root) {
         {
             std::scoped_lock lock(node->expansion_mutex_);
             if (node->children.empty()) {
+                node->fen_history = current_fen_history; // Store history in the node
                 node->expand(pos, eval.policy);
             }
         }

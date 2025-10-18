@@ -1,0 +1,115 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    POSITION HISTORY TENSOR STRUCTURE                          ║
+║                       (8 positions × 8×8 board)                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│ HISTORICAL POSITIONS (Positions 0-6)                                          │
+│ Each position: 64 squares × 13 channels = 832 values                         │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+Position 0 (Oldest - T-7):  [Empty if game just started]
+Position 1 (T-6):           [Empty if < 7 moves played]
+Position 2 (T-5):           [Empty if < 6 moves played]
+Position 3 (T-4):           [Empty if < 5 moves played]
+Position 4 (T-3):           [Empty if < 4 moves played]
+Position 5 (T-2):           [Empty if < 3 moves played]
+Position 6 (T-1):           [Previous position]
+
+Each historical position has 13 channels per square:
+┌─────────────────────────────────────────────────────────────┐
+│ Channel  0: Own Pawn         (1.0 if present, 0.0 if not)  │
+│ Channel  1: Own Knight       (1.0 if present, 0.0 if not)  │
+│ Channel  2: Own Bishop       (1.0 if present, 0.0 if not)  │
+│ Channel  3: Own Rook         (1.0 if present, 0.0 if not)  │
+│ Channel  4: Own Queen        (1.0 if present, 0.0 if not)  │
+│ Channel  5: Own King         (1.0 if present, 0.0 if not)  │
+│ Channel  6: Opponent Pawn    (1.0 if present, 0.0 if not)  │
+│ Channel  7: Opponent Knight  (1.0 if present, 0.0 if not)  │
+│ Channel  8: Opponent Bishop  (1.0 if present, 0.0 if not)  │
+│ Channel  9: Opponent Rook    (1.0 if present, 0.0 if not)  │
+│ Channel 10: Opponent Queen   (1.0 if present, 0.0 if not)  │
+│ Channel 11: Opponent King    (1.0 if present, 0.0 if not)  │
+│ Channel 12: Side to Move     (1.0 if white, 0.0 if black)  │
+└─────────────────────────────────────────────────────────────┘
+
+7 positions × 832 values = 5,824 values
+
+┌───────────────────────────────────────────────────────────────────────────────┐
+│ CURRENT POSITION (Position 7)                                                │
+│ 64 squares × 17 channels = 1,088 values                                      │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+Position 7 (Current - T):   [Always present]
+
+Current position has 17 channels per square:
+┌─────────────────────────────────────────────────────────────┐
+│ Channel  0: Own Pawn                                        │
+│ Channel  1: Own Knight                                      │
+│ Channel  2: Own Bishop                                      │
+│ Channel  3: Own Rook                                        │
+│ Channel  4: Own Queen                                       │
+│ Channel  5: Own King                                        │
+│ Channel  6: Opponent Pawn                                   │
+│ Channel  7: Opponent Knight                                 │
+│ Channel  8: Opponent Bishop                                 │
+│ Channel  9: Opponent Rook                                   │
+│ Channel 10: Opponent Queen                                  │
+│ Channel 11: Opponent King                                   │
+│ Channel 12: Own Kingside Castling    (1.0 if allowed)      │
+│ Channel 13: Own Queenside Castling   (1.0 if allowed)      │
+│ Channel 14: Opp Kingside Castling    (1.0 if allowed)      │
+│ Channel 15: Opp Queenside Castling   (1.0 if allowed)      │
+│ Channel 16: Side to Move             (1.0 if white)        │
+└─────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════
+TOTAL TENSOR SIZE: 5,824 + 1,088 = 6,912 values
+SHAPE FOR NEURAL NETWORK: (batch_size, 8, 8, 108)
+═══════════════════════════════════════════════════════════════
+
+EXAMPLE GAME PROGRESSION:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Move 1 (after 1.e4):
+  Position 0-6: [All empty/zeros]
+  Position 7:   Starting position (current)
+
+Move 2 (after 1.e4 c5):
+  Position 0-5: [All empty/zeros]
+  Position 6:   Starting position
+  Position 7:   After 1.e4 (current)
+
+Move 3 (after 1.e4 c5 2.Nf3):
+  Position 0-4: [All empty/zeros]
+  Position 5:   Starting position
+  Position 6:   After 1.e4
+  Position 7:   After 1...c5 (current)
+
+Move 8 (after 1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6):
+  Position 0:   Starting position
+  Position 1:   After 1.e4
+  Position 2:   After 1...c5
+  Position 3:   After 2.Nf3
+  Position 4:   After 2...d6
+  Position 5:   After 3.d4
+  Position 6:   After 3...cxd4
+  Position 7:   After 4.Nxd4 (current)
+
+Move 9+ (always has full history):
+  Position 0:   7 moves ago
+  Position 1:   6 moves ago
+  Position 2:   5 moves ago
+  Position 3:   4 moves ago
+  Position 4:   3 moves ago
+  Position 5:   2 moves ago
+  Position 6:   1 move ago
+  Position 7:   Current position
+
+KEY FEATURES:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ All positions viewed from current player's perspective
+✓ Positions automatically rotated for black to move
+✓ Empty history positions represented as all zeros
+✓ Castling rights only in current position (position 7)
+✓ Compatible with AlphaZero-style temporal learning

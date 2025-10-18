@@ -154,6 +154,9 @@ GameResult play_single_game(MCTS& mcts_engine, int game_id, const MCTSConfig& co
     std::map<uint64_t, int> position_history;
     position_history[pos.get_hash()] = 1;
     
+    // Track FEN history for the neural network (last 7 positions)
+    std::deque<std::string> fen_history;
+    
     int full_move_count = 0;
     int iteration_ = 400;
     const int MAX_MOVES = 200;
@@ -175,8 +178,8 @@ GameResult play_single_game(MCTS& mcts_engine, int game_id, const MCTSConfig& co
             mcts_engine.set_dirichlet_alpha(0.10);
         }
         
-        // Run search with the shared MCTS engine (don't clear after search)
-        Move best_move = mcts_engine.run_search(pos, iteration_, false);
+        // Run search with position history
+        Move best_move = mcts_engine.run_search(pos, iteration_, false, fen_history);
         
         if (best_move == Move()) {
             if (!is_white) {
@@ -185,6 +188,12 @@ GameResult play_single_game(MCTS& mcts_engine, int game_id, const MCTSConfig& co
                 game_result = "1-0";
             }
             break;
+        }
+        
+        // Save current position to history before making the move
+        fen_history.push_back(pos.fen());
+        if (fen_history.size() > 7) {
+            fen_history.pop_front(); // Keep only last 7
         }
         
         moves_played.push_back(best_move);
