@@ -9,6 +9,7 @@ __pycache__/
 # Ignore pgns directory and game PGNs
 pgns/
 *.pgn
+*.h5
 
 # Ignore grpc directory
 grpc/
