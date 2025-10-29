@@ -3,6 +3,7 @@
 #include "types.h"
 #include "remote_evaluator.h"
 #include <deque>
+#include <vector>
 #include <memory>
 #include <atomic>
 #include <mutex>
@@ -23,7 +24,7 @@ class MCTSNode {
 public:
     MCTSNode(Move move, MCTSNode* parent, float policy_prior);
     MCTSNode* best_child(double c_puct) const;
-    void expand(Position& pos, const std::deque<float>& policy_priors);
+    void expand(Position& pos, const std::vector<float>& policy_priors);  // Changed from deque to vector
     void backpropagate(double value);
     double q_value() const;
 
@@ -34,6 +35,7 @@ public:
     float policy_prior_;
     std::atomic<int> visits{0};
     std::atomic<int> virtual_loss_{0};  // Track virtual losses for parallel MCTS
+    std::deque<std::string> fen_history; // Track the 7 previous positions leading to this node
 
 private:
     friend class MCTS;
@@ -47,6 +49,9 @@ public:
     
     // Main entry point - now with clear_after_search parameter
     Move run_search(const Position& initial_pos, int iterations, bool clear_after_search = true);
+    
+    // Overload with position history
+    Move run_search(const Position& initial_pos, int iterations, bool clear_after_search, const std::deque<std::string>& position_history);
     
     // Explicitly clear evaluator state
     void clear_evaluator_state();
