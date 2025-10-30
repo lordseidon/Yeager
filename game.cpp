@@ -290,7 +290,7 @@ int main() {
     
     std::string model_path = "model";
     int min_batch_size = 16;
-    const int NUM_GAMES = 1;
+    const int NUM_GAMES = 5;
     const int ITERATIONS_PER_MOVE = 800;
     
     std::cout << "\n=== Configuration ===" << std::endl;
