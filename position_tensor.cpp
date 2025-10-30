@@ -19,41 +19,33 @@ namespace MoveMappings {
         
         std::vector<std::string> moves;
         
-        // Generate all possible moves - EXACTLY matching Python implementation
+        // Generate all possible moves (from_square, to_square combinations)
         for (int from_sq = 0; from_sq < 64; from_sq++) {
             for (int to_sq = 0; to_sq < 64; to_sq++) {
-                // Always include the normal move
-                std::string move_uci = square_to_string(static_cast<Square>(from_sq)) + 
-                                      square_to_string(static_cast<Square>(to_sq));
-                moves.push_back(move_uci);
-                
-                // Add promotions if the move could be a pawn promotion
                 int from_rank = from_sq / 8;
                 int to_rank = to_sq / 8;
                 
-                // White pawn promotion (rank 6 → rank 7, i.e., 7th rank → 8th rank in 0-indexed)
-                if (from_rank == 6 && to_rank == 7) {
-                    char promotions[] = {'q', 'r', 'b', 'n'};
-                    for (char promo : promotions) {
-                        std::string promo_move = square_to_string(static_cast<Square>(from_sq)) + 
-                                                square_to_string(static_cast<Square>(to_sq)) + promo;
-                        moves.push_back(promo_move);
-                    }
-                }
+                // Check for promotion moves
+                bool is_white_promo = (from_rank == 6 && to_rank == 7);
+                bool is_black_promo = (from_rank == 1 && to_rank == 0);
                 
-                // Black pawn promotion (rank 1 → rank 0, i.e., 2nd rank → 1st rank in 0-indexed)
-                if (from_rank == 1 && to_rank == 0) {
+                if (is_white_promo || is_black_promo) {
+                    // Add promotion moves for each piece type
                     char promotions[] = {'q', 'r', 'b', 'n'};
                     for (char promo : promotions) {
-                        std::string promo_move = square_to_string(static_cast<Square>(from_sq)) + 
-                                                square_to_string(static_cast<Square>(to_sq)) + promo;
-                        moves.push_back(promo_move);
+                        std::string move_uci = square_to_string(static_cast<Square>(from_sq)) + 
+                                              square_to_string(static_cast<Square>(to_sq)) + promo;
+                        moves.push_back(move_uci);
                     }
+                } else {
+                    std::string move_uci = square_to_string(static_cast<Square>(from_sq)) + 
+                                          square_to_string(static_cast<Square>(to_sq));
+                    moves.push_back(move_uci);
                 }
             }
         }
         
-        // Remove duplicates and sort for stable indexing
+        // Remove duplicates and sort
         std::sort(moves.begin(), moves.end());
         moves.erase(std::unique(moves.begin(), moves.end()), moves.end());
         
@@ -77,7 +69,6 @@ namespace MoveMappings {
         return (it != move_to_index.end()) ? it->second : -1;
     }
 }
-
 
 // Helper function to convert square to string (e.g., A1, B2, etc.)
 std::string square_to_string(Square sq) {

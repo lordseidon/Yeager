@@ -7,23 +7,23 @@
 #include "inference.pb.h"
 
 #include <functional>
-#include <grpcpp/impl/codegen/async_generic_service.h>
-#include <grpcpp/impl/codegen/async_stream.h>
-#include <grpcpp/impl/codegen/async_unary_call.h>
-#include <grpcpp/impl/codegen/method_handler_impl.h>
+#include <grpcpp/generic/async_generic_service.h>
+#include <grpcpp/support/async_stream.h>
+#include <grpcpp/support/async_unary_call.h>
+#include <grpcpp/support/client_callback.h>
+#include <grpcpp/client_context.h>
+#include <grpcpp/completion_queue.h>
+#include <grpcpp/support/message_allocator.h>
+#include <grpcpp/support/method_handler.h>
 #include <grpcpp/impl/codegen/proto_utils.h>
-#include <grpcpp/impl/codegen/rpc_method.h>
-#include <grpcpp/impl/codegen/service_type.h>
+#include <grpcpp/impl/rpc_method.h>
+#include <grpcpp/support/server_callback.h>
+#include <grpcpp/impl/codegen/server_callback_handlers.h>
+#include <grpcpp/server_context.h>
+#include <grpcpp/impl/service_type.h>
 #include <grpcpp/impl/codegen/status.h>
-#include <grpcpp/impl/codegen/stub_options.h>
-#include <grpcpp/impl/codegen/sync_stream.h>
-
-namespace grpc {
-class CompletionQueue;
-class Channel;
-class ServerCompletionQueue;
-class ServerContext;
-}  // namespace grpc
+#include <grpcpp/support/stub_options.h>
+#include <grpcpp/support/sync_stream.h>
 
 namespace inference {
 
@@ -42,19 +42,22 @@ class InferenceService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::inference::BatchInferenceResponse>> PrepareAsyncEvaluate(::grpc::ClientContext* context, const ::inference::BatchInferenceRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::inference::BatchInferenceResponse>>(PrepareAsyncEvaluateRaw(context, request, cq));
     }
-    class experimental_async_interface {
+    class async_interface {
      public:
-      virtual ~experimental_async_interface() {}
+      virtual ~async_interface() {}
       virtual void Evaluate(::grpc::ClientContext* context, const ::inference::BatchInferenceRequest* request, ::inference::BatchInferenceResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Evaluate(::grpc::ClientContext* context, const ::inference::BatchInferenceRequest* request, ::inference::BatchInferenceResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
-    virtual class experimental_async_interface* experimental_async() { return nullptr; }
-  private:
+    typedef class async_interface experimental_async_interface;
+    virtual class async_interface* async() { return nullptr; }
+    class async_interface* experimental_async() { return async(); }
+   private:
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::inference::BatchInferenceResponse>* AsyncEvaluateRaw(::grpc::ClientContext* context, const ::inference::BatchInferenceRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::inference::BatchInferenceResponse>* PrepareAsyncEvaluateRaw(::grpc::ClientContext* context, const ::inference::BatchInferenceRequest& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
-    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
+    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
     ::grpc::Status Evaluate(::grpc::ClientContext* context, const ::inference::BatchInferenceRequest& request, ::inference::BatchInferenceResponse* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::inference::BatchInferenceResponse>> AsyncEvaluate(::grpc::ClientContext* context, const ::inference::BatchInferenceRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::inference::BatchInferenceResponse>>(AsyncEvaluateRaw(context, request, cq));
@@ -62,21 +65,22 @@ class InferenceService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::inference::BatchInferenceResponse>> PrepareAsyncEvaluate(::grpc::ClientContext* context, const ::inference::BatchInferenceRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::inference::BatchInferenceResponse>>(PrepareAsyncEvaluateRaw(context, request, cq));
     }
-    class experimental_async final :
-      public StubInterface::experimental_async_interface {
+    class async final :
+      public StubInterface::async_interface {
      public:
       void Evaluate(::grpc::ClientContext* context, const ::inference::BatchInferenceRequest* request, ::inference::BatchInferenceResponse* response, std::function<void(::grpc::Status)>) override;
+      void Evaluate(::grpc::ClientContext* context, const ::inference::BatchInferenceRequest* request, ::inference::BatchInferenceResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
-      explicit experimental_async(Stub* stub): stub_(stub) { }
+      explicit async(Stub* stub): stub_(stub) { }
       Stub* stub() { return stub_; }
       Stub* stub_;
     };
-    class experimental_async_interface* experimental_async() override { return &async_stub_; }
+    class async* async() override { return &async_stub_; }
 
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
-    class experimental_async async_stub_{this};
+    class async async_stub_{this};
     ::grpc::ClientAsyncResponseReader< ::inference::BatchInferenceResponse>* AsyncEvaluateRaw(::grpc::ClientContext* context, const ::inference::BatchInferenceRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::inference::BatchInferenceResponse>* PrepareAsyncEvaluateRaw(::grpc::ClientContext* context, const ::inference::BatchInferenceRequest& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_Evaluate_;
@@ -92,7 +96,7 @@ class InferenceService final {
   template <class BaseClass>
   class WithAsyncMethod_Evaluate : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Evaluate() {
       ::grpc::Service::MarkMethodAsync(0);
@@ -101,7 +105,7 @@ class InferenceService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Evaluate(::grpc::ServerContext* context, const ::inference::BatchInferenceRequest* request, ::inference::BatchInferenceResponse* response) override {
+    ::grpc::Status Evaluate(::grpc::ServerContext* /*context*/, const ::inference::BatchInferenceRequest* /*request*/, ::inference::BatchInferenceResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -111,9 +115,38 @@ class InferenceService final {
   };
   typedef WithAsyncMethod_Evaluate<Service > AsyncService;
   template <class BaseClass>
+  class WithCallbackMethod_Evaluate : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_Evaluate() {
+      ::grpc::Service::MarkMethodCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::inference::BatchInferenceRequest, ::inference::BatchInferenceResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::inference::BatchInferenceRequest* request, ::inference::BatchInferenceResponse* response) { return this->Evaluate(context, request, response); }));}
+    void SetMessageAllocatorFor_Evaluate(
+        ::grpc::MessageAllocator< ::inference::BatchInferenceRequest, ::inference::BatchInferenceResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::inference::BatchInferenceRequest, ::inference::BatchInferenceResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_Evaluate() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Evaluate(::grpc::ServerContext* /*context*/, const ::inference::BatchInferenceRequest* /*request*/, ::inference::BatchInferenceResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* Evaluate(
+      ::grpc::CallbackServerContext* /*context*/, const ::inference::BatchInferenceRequest* /*request*/, ::inference::BatchInferenceResponse* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_Evaluate<Service > CallbackService;
+  typedef CallbackService ExperimentalCallbackService;
+  template <class BaseClass>
   class WithGenericMethod_Evaluate : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Evaluate() {
       ::grpc::Service::MarkMethodGeneric(0);
@@ -122,7 +155,7 @@ class InferenceService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Evaluate(::grpc::ServerContext* context, const ::inference::BatchInferenceRequest* request, ::inference::BatchInferenceResponse* response) override {
+    ::grpc::Status Evaluate(::grpc::ServerContext* /*context*/, const ::inference::BatchInferenceRequest* /*request*/, ::inference::BatchInferenceResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -130,7 +163,7 @@ class InferenceService final {
   template <class BaseClass>
   class WithRawMethod_Evaluate : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Evaluate() {
       ::grpc::Service::MarkMethodRaw(0);
@@ -139,7 +172,7 @@ class InferenceService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Evaluate(::grpc::ServerContext* context, const ::inference::BatchInferenceRequest* request, ::inference::BatchInferenceResponse* response) override {
+    ::grpc::Status Evaluate(::grpc::ServerContext* /*context*/, const ::inference::BatchInferenceRequest* /*request*/, ::inference::BatchInferenceResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -148,19 +181,48 @@ class InferenceService final {
     }
   };
   template <class BaseClass>
+  class WithRawCallbackMethod_Evaluate : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_Evaluate() {
+      ::grpc::Service::MarkMethodRawCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Evaluate(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_Evaluate() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Evaluate(::grpc::ServerContext* /*context*/, const ::inference::BatchInferenceRequest* /*request*/, ::inference::BatchInferenceResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* Evaluate(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
   class WithStreamedUnaryMethod_Evaluate : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Evaluate() {
       ::grpc::Service::MarkMethodStreamed(0,
-        new ::grpc::internal::StreamedUnaryHandler< ::inference::BatchInferenceRequest, ::inference::BatchInferenceResponse>(std::bind(&WithStreamedUnaryMethod_Evaluate<BaseClass>::StreamedEvaluate, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::inference::BatchInferenceRequest, ::inference::BatchInferenceResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::inference::BatchInferenceRequest, ::inference::BatchInferenceResponse>* streamer) {
+                       return this->StreamedEvaluate(context,
+                         streamer);
+                  }));
     }
     ~WithStreamedUnaryMethod_Evaluate() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status Evaluate(::grpc::ServerContext* context, const ::inference::BatchInferenceRequest* request, ::inference::BatchInferenceResponse* response) override {
+    ::grpc::Status Evaluate(::grpc::ServerContext* /*context*/, const ::inference::BatchInferenceRequest* /*request*/, ::inference::BatchInferenceResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }

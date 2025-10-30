@@ -5,358 +5,269 @@
 
 #include <algorithm>
 
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/stubs/port.h>
 #include <google/protobuf/io/coded_stream.h>
-#include <google/protobuf/wire_format_lite_inl.h>
+#include <google/protobuf/extension_set.h>
+#include <google/protobuf/wire_format_lite.h>
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-// This is a temporary google only hack
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-#include "third_party/protobuf/version.h"
-#endif
 // @@protoc_insertion_point(includes)
+#include <google/protobuf/port_def.inc>
 
-namespace protobuf_inference_2eproto {
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_inference_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_EvaluationResult;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_inference_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_PositionTensor;
-}  // namespace protobuf_inference_2eproto
+PROTOBUF_PRAGMA_INIT_SEG
+
+namespace _pb = ::PROTOBUF_NAMESPACE_ID;
+namespace _pbi = _pb::internal;
+
 namespace inference {
-class PositionTensorDefaultTypeInternal {
- public:
-  ::google::protobuf::internal::ExplicitlyConstructed<PositionTensor>
-      _instance;
-} _PositionTensor_default_instance_;
-class BatchInferenceRequestDefaultTypeInternal {
- public:
-  ::google::protobuf::internal::ExplicitlyConstructed<BatchInferenceRequest>
-      _instance;
-} _BatchInferenceRequest_default_instance_;
-class EvaluationResultDefaultTypeInternal {
- public:
-  ::google::protobuf::internal::ExplicitlyConstructed<EvaluationResult>
-      _instance;
-} _EvaluationResult_default_instance_;
-class BatchInferenceResponseDefaultTypeInternal {
- public:
-  ::google::protobuf::internal::ExplicitlyConstructed<BatchInferenceResponse>
-      _instance;
-} _BatchInferenceResponse_default_instance_;
-}  // namespace inference
-namespace protobuf_inference_2eproto {
-static void InitDefaultsPositionTensor() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::inference::_PositionTensor_default_instance_;
-    new (ptr) ::inference::PositionTensor();
-    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::inference::PositionTensor::InitAsDefaultInstance();
-}
-
-::google::protobuf::internal::SCCInfo<0> scc_info_PositionTensor =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsPositionTensor}, {}};
-
-static void InitDefaultsBatchInferenceRequest() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::inference::_BatchInferenceRequest_default_instance_;
-    new (ptr) ::inference::BatchInferenceRequest();
-    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::inference::BatchInferenceRequest::InitAsDefaultInstance();
-}
-
-::google::protobuf::internal::SCCInfo<1> scc_info_BatchInferenceRequest =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsBatchInferenceRequest}, {
-      &protobuf_inference_2eproto::scc_info_PositionTensor.base,}};
-
-static void InitDefaultsEvaluationResult() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::inference::_EvaluationResult_default_instance_;
-    new (ptr) ::inference::EvaluationResult();
-    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::inference::EvaluationResult::InitAsDefaultInstance();
-}
-
-::google::protobuf::internal::SCCInfo<0> scc_info_EvaluationResult =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsEvaluationResult}, {}};
-
-static void InitDefaultsBatchInferenceResponse() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::inference::_BatchInferenceResponse_default_instance_;
-    new (ptr) ::inference::BatchInferenceResponse();
-    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::inference::BatchInferenceResponse::InitAsDefaultInstance();
-}
-
-::google::protobuf::internal::SCCInfo<1> scc_info_BatchInferenceResponse =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsBatchInferenceResponse}, {
-      &protobuf_inference_2eproto::scc_info_EvaluationResult.base,}};
-
-void InitDefaults() {
-  ::google::protobuf::internal::InitSCC(&scc_info_PositionTensor.base);
-  ::google::protobuf::internal::InitSCC(&scc_info_BatchInferenceRequest.base);
-  ::google::protobuf::internal::InitSCC(&scc_info_EvaluationResult.base);
-  ::google::protobuf::internal::InitSCC(&scc_info_BatchInferenceResponse.base);
-}
-
-::google::protobuf::Metadata file_level_metadata[4];
-
-const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-  ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::inference::PositionTensor, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::inference::PositionTensor, board_state_),
-  ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::inference::BatchInferenceRequest, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::inference::BatchInferenceRequest, positions_),
-  ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::inference::EvaluationResult, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::inference::EvaluationResult, policy_logits_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::inference::EvaluationResult, value_),
-  ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::inference::BatchInferenceResponse, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::inference::BatchInferenceResponse, evaluations_),
-};
-static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(::inference::PositionTensor)},
-  { 6, -1, sizeof(::inference::BatchInferenceRequest)},
-  { 12, -1, sizeof(::inference::EvaluationResult)},
-  { 19, -1, sizeof(::inference::BatchInferenceResponse)},
-};
-
-static ::google::protobuf::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::google::protobuf::Message*>(&::inference::_PositionTensor_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&::inference::_BatchInferenceRequest_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&::inference::_EvaluationResult_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&::inference::_BatchInferenceResponse_default_instance_),
-};
-
-void protobuf_AssignDescriptors() {
-  AddDescriptors();
-  AssignDescriptors(
-      "inference.proto", schemas, file_default_instances, TableStruct::offsets,
-      file_level_metadata, NULL, NULL);
-}
-
-void protobuf_AssignDescriptorsOnce() {
-  static ::google::protobuf::internal::once_flag once;
-  ::google::protobuf::internal::call_once(once, protobuf_AssignDescriptors);
-}
-
-void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
-void protobuf_RegisterTypes(const ::std::string&) {
-  protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 4);
-}
-
-void AddDescriptorsImpl() {
-  InitDefaults();
-  static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\017inference.proto\022\tinference\"%\n\016Position"
-      "Tensor\022\023\n\013board_state\030\001 \003(\002\"E\n\025BatchInfe"
-      "renceRequest\022,\n\tpositions\030\001 \003(\0132\031.infere"
-      "nce.PositionTensor\"8\n\020EvaluationResult\022\025"
-      "\n\rpolicy_logits\030\001 \003(\002\022\r\n\005value\030\002 \001(\002\"J\n\026"
-      "BatchInferenceResponse\0220\n\013evaluations\030\001 "
-      "\003(\0132\033.inference.EvaluationResult2c\n\020Infe"
-      "renceService\022O\n\010Evaluate\022 .inference.Bat"
-      "chInferenceRequest\032!.inference.BatchInfe"
-      "renceResponseb\006proto3"
+PROTOBUF_CONSTEXPR PositionTensor::PositionTensor(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.board_state_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct PositionTensorDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR PositionTensorDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~PositionTensorDefaultTypeInternal() {}
+  union {
+    PositionTensor _instance;
   };
-  ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 381);
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
-    "inference.proto", &protobuf_RegisterTypes);
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PositionTensorDefaultTypeInternal _PositionTensor_default_instance_;
+PROTOBUF_CONSTEXPR BatchInferenceRequest::BatchInferenceRequest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.positions_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct BatchInferenceRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR BatchInferenceRequestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~BatchInferenceRequestDefaultTypeInternal() {}
+  union {
+    BatchInferenceRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BatchInferenceRequestDefaultTypeInternal _BatchInferenceRequest_default_instance_;
+PROTOBUF_CONSTEXPR EvaluationResult::EvaluationResult(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.policy_logits_)*/{}
+  , /*decltype(_impl_.value_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct EvaluationResultDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR EvaluationResultDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~EvaluationResultDefaultTypeInternal() {}
+  union {
+    EvaluationResult _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 EvaluationResultDefaultTypeInternal _EvaluationResult_default_instance_;
+PROTOBUF_CONSTEXPR BatchInferenceResponse::BatchInferenceResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.evaluations_)*/{}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct BatchInferenceResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR BatchInferenceResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~BatchInferenceResponseDefaultTypeInternal() {}
+  union {
+    BatchInferenceResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BatchInferenceResponseDefaultTypeInternal _BatchInferenceResponse_default_instance_;
+}  // namespace inference
+static ::_pb::Metadata file_level_metadata_inference_2eproto[4];
+static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_inference_2eproto = nullptr;
+static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_inference_2eproto = nullptr;
+
+const uint32_t TableStruct_inference_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::inference::PositionTensor, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::inference::PositionTensor, _impl_.board_state_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::inference::BatchInferenceRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::inference::BatchInferenceRequest, _impl_.positions_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::inference::EvaluationResult, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::inference::EvaluationResult, _impl_.policy_logits_),
+  PROTOBUF_FIELD_OFFSET(::inference::EvaluationResult, _impl_.value_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::inference::BatchInferenceResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::inference::BatchInferenceResponse, _impl_.evaluations_),
+};
+static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  { 0, -1, -1, sizeof(::inference::PositionTensor)},
+  { 7, -1, -1, sizeof(::inference::BatchInferenceRequest)},
+  { 14, -1, -1, sizeof(::inference::EvaluationResult)},
+  { 22, -1, -1, sizeof(::inference::BatchInferenceResponse)},
+};
+
+static const ::_pb::Message* const file_default_instances[] = {
+  &::inference::_PositionTensor_default_instance_._instance,
+  &::inference::_BatchInferenceRequest_default_instance_._instance,
+  &::inference::_EvaluationResult_default_instance_._instance,
+  &::inference::_BatchInferenceResponse_default_instance_._instance,
+};
+
+const char descriptor_table_protodef_inference_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
+  "\n\017inference.proto\022\tinference\"%\n\016Position"
+  "Tensor\022\023\n\013board_state\030\001 \003(\002\"E\n\025BatchInfe"
+  "renceRequest\022,\n\tpositions\030\001 \003(\0132\031.infere"
+  "nce.PositionTensor\"8\n\020EvaluationResult\022\025"
+  "\n\rpolicy_logits\030\001 \003(\002\022\r\n\005value\030\002 \001(\002\"J\n\026"
+  "BatchInferenceResponse\0220\n\013evaluations\030\001 "
+  "\003(\0132\033.inference.EvaluationResult2c\n\020Infe"
+  "renceService\022O\n\010Evaluate\022 .inference.Bat"
+  "chInferenceRequest\032!.inference.BatchInfe"
+  "renceResponseb\006proto3"
+  ;
+static ::_pbi::once_flag descriptor_table_inference_2eproto_once;
+const ::_pbi::DescriptorTable descriptor_table_inference_2eproto = {
+    false, false, 381, descriptor_table_protodef_inference_2eproto,
+    "inference.proto",
+    &descriptor_table_inference_2eproto_once, nullptr, 0, 4,
+    schemas, file_default_instances, TableStruct_inference_2eproto::offsets,
+    file_level_metadata_inference_2eproto, file_level_enum_descriptors_inference_2eproto,
+    file_level_service_descriptors_inference_2eproto,
+};
+PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_inference_2eproto_getter() {
+  return &descriptor_table_inference_2eproto;
 }
 
-void AddDescriptors() {
-  static ::google::protobuf::internal::once_flag once;
-  ::google::protobuf::internal::call_once(once, AddDescriptorsImpl);
-}
-// Force AddDescriptors() to be called at dynamic initialization time.
-struct StaticDescriptorInitializer {
-  StaticDescriptorInitializer() {
-    AddDescriptors();
-  }
-} static_descriptor_initializer;
-}  // namespace protobuf_inference_2eproto
+// Force running AddDescriptors() at dynamic initialization time.
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_inference_2eproto(&descriptor_table_inference_2eproto);
 namespace inference {
 
 // ===================================================================
 
-void PositionTensor::InitAsDefaultInstance() {
-}
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int PositionTensor::kBoardStateFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+class PositionTensor::_Internal {
+ public:
+};
 
-PositionTensor::PositionTensor()
-  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  ::google::protobuf::internal::InitSCC(
-      &protobuf_inference_2eproto::scc_info_PositionTensor.base);
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:inference.PositionTensor)
+PositionTensor::PositionTensor(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:inference.PositionTensor)
 }
 PositionTensor::PositionTensor(const PositionTensor& from)
-  : ::google::protobuf::Message(),
-      _internal_metadata_(NULL),
-      board_state_(from.board_state_) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  PositionTensor* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.board_state_){from._impl_.board_state_}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:inference.PositionTensor)
 }
 
-void PositionTensor::SharedCtor() {
+inline void PositionTensor::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.board_state_){arena}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 PositionTensor::~PositionTensor() {
   // @@protoc_insertion_point(destructor:inference.PositionTensor)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
 }
 
-void PositionTensor::SharedDtor() {
+inline void PositionTensor::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.board_state_.~RepeatedField();
 }
 
 void PositionTensor::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
-const ::google::protobuf::Descriptor* PositionTensor::descriptor() {
-  ::protobuf_inference_2eproto::protobuf_AssignDescriptorsOnce();
-  return ::protobuf_inference_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
-}
-
-const PositionTensor& PositionTensor::default_instance() {
-  ::google::protobuf::internal::InitSCC(&protobuf_inference_2eproto::scc_info_PositionTensor.base);
-  return *internal_default_instance();
-}
-
 
 void PositionTensor::Clear() {
 // @@protoc_insertion_point(message_clear_start:inference.PositionTensor)
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  board_state_.Clear();
-  _internal_metadata_.Clear();
+  _impl_.board_state_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-bool PositionTensor::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:inference.PositionTensor)
-  for (;;) {
-    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+const char* PositionTensor::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
       // repeated float board_state = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 input, this->mutable_board_state())));
-        } else if (
-            static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(13u /* 13 & 0xFF */)) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 1, 10u, input, this->mutable_board_state())));
-        } else {
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedFloatParser(_internal_mutable_board_state(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 13) {
+          _internal_add_board_state(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr));
+          ptr += sizeof(float);
+        } else
           goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormat::SkipField(
-              input, tag, _internal_metadata_.mutable_unknown_fields()));
-        break;
-      }
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
     }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:inference.PositionTensor)
-  return true;
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
 failure:
-  // @@protoc_insertion_point(parse_failure:inference.PositionTensor)
-  return false;
-#undef DO_
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
 }
 
-void PositionTensor::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:inference.PositionTensor)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // repeated float board_state = 1;
-  if (this->board_state_size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteTag(1, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
-    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
-        _board_state_cached_byte_size_));
-    ::google::protobuf::internal::WireFormatLite::WriteFloatArray(
-      this->board_state().data(), this->board_state_size(), output);
-  }
-
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
-  }
-  // @@protoc_insertion_point(serialize_end:inference.PositionTensor)
-}
-
-::google::protobuf::uint8* PositionTensor::InternalSerializeWithCachedSizesToArray(
-    bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
+uint8_t* PositionTensor::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:inference.PositionTensor)
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // repeated float board_state = 1;
-  if (this->board_state_size() > 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
-      1,
-      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
-      target);
-    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
-        static_cast< ::google::protobuf::int32>(
-            _board_state_cached_byte_size_), target);
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteFloatNoTagToArray(this->board_state_, target);
+  if (this->_internal_board_state_size() > 0) {
+    target = stream->WriteFixedPacked(1, _internal_board_state(), target);
   }
 
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:inference.PositionTensor)
   return target;
@@ -366,62 +277,41 @@ size_t PositionTensor::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:inference.PositionTensor)
   size_t total_size = 0;
 
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
-  }
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
   // repeated float board_state = 1;
   {
-    unsigned int count = static_cast<unsigned int>(this->board_state_size());
+    unsigned int count = static_cast<unsigned int>(this->_internal_board_state_size());
     size_t data_size = 4UL * count;
     if (data_size > 0) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-            static_cast< ::google::protobuf::int32>(data_size));
+        ::_pbi::WireFormatLite::Int32Size(static_cast<int32_t>(data_size));
     }
-    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
-    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-    _board_state_cached_byte_size_ = cached_size;
-    GOOGLE_SAFE_CONCURRENT_WRITES_END();
     total_size += data_size;
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-void PositionTensor::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:inference.PositionTensor)
-  GOOGLE_DCHECK_NE(&from, this);
-  const PositionTensor* source =
-      ::google::protobuf::internal::DynamicCastToGenerated<const PositionTensor>(
-          &from);
-  if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:inference.PositionTensor)
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:inference.PositionTensor)
-    MergeFrom(*source);
-  }
-}
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData PositionTensor::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    PositionTensor::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*PositionTensor::GetClassData() const { return &_class_data_; }
 
-void PositionTensor::MergeFrom(const PositionTensor& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:inference.PositionTensor)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
+
+void PositionTensor::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<PositionTensor*>(&to_msg);
+  auto& from = static_cast<const PositionTensor&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:inference.PositionTensor)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  board_state_.MergeFrom(from.board_state_);
-}
-
-void PositionTensor::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:inference.PositionTensor)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
+  _this->_impl_.board_state_.MergeFrom(from._impl_.board_state_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void PositionTensor::CopyFrom(const PositionTensor& from) {
@@ -435,162 +325,138 @@ bool PositionTensor::IsInitialized() const {
   return true;
 }
 
-void PositionTensor::Swap(PositionTensor* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
 void PositionTensor::InternalSwap(PositionTensor* other) {
   using std::swap;
-  board_state_.InternalSwap(&other->board_state_);
-  _internal_metadata_.Swap(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.board_state_.InternalSwap(&other->_impl_.board_state_);
 }
 
-::google::protobuf::Metadata PositionTensor::GetMetadata() const {
-  protobuf_inference_2eproto::protobuf_AssignDescriptorsOnce();
-  return ::protobuf_inference_2eproto::file_level_metadata[kIndexInFileMessages];
+::PROTOBUF_NAMESPACE_ID::Metadata PositionTensor::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_inference_2eproto_getter, &descriptor_table_inference_2eproto_once,
+      file_level_metadata_inference_2eproto[0]);
 }
-
 
 // ===================================================================
 
-void BatchInferenceRequest::InitAsDefaultInstance() {
-}
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int BatchInferenceRequest::kPositionsFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+class BatchInferenceRequest::_Internal {
+ public:
+};
 
-BatchInferenceRequest::BatchInferenceRequest()
-  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  ::google::protobuf::internal::InitSCC(
-      &protobuf_inference_2eproto::scc_info_BatchInferenceRequest.base);
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:inference.BatchInferenceRequest)
+BatchInferenceRequest::BatchInferenceRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:inference.BatchInferenceRequest)
 }
 BatchInferenceRequest::BatchInferenceRequest(const BatchInferenceRequest& from)
-  : ::google::protobuf::Message(),
-      _internal_metadata_(NULL),
-      positions_(from.positions_) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  BatchInferenceRequest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.positions_){from._impl_.positions_}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:inference.BatchInferenceRequest)
 }
 
-void BatchInferenceRequest::SharedCtor() {
+inline void BatchInferenceRequest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.positions_){arena}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 BatchInferenceRequest::~BatchInferenceRequest() {
   // @@protoc_insertion_point(destructor:inference.BatchInferenceRequest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
 }
 
-void BatchInferenceRequest::SharedDtor() {
+inline void BatchInferenceRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.positions_.~RepeatedPtrField();
 }
 
 void BatchInferenceRequest::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
-const ::google::protobuf::Descriptor* BatchInferenceRequest::descriptor() {
-  ::protobuf_inference_2eproto::protobuf_AssignDescriptorsOnce();
-  return ::protobuf_inference_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
-}
-
-const BatchInferenceRequest& BatchInferenceRequest::default_instance() {
-  ::google::protobuf::internal::InitSCC(&protobuf_inference_2eproto::scc_info_BatchInferenceRequest.base);
-  return *internal_default_instance();
-}
-
 
 void BatchInferenceRequest::Clear() {
 // @@protoc_insertion_point(message_clear_start:inference.BatchInferenceRequest)
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  positions_.Clear();
-  _internal_metadata_.Clear();
+  _impl_.positions_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-bool BatchInferenceRequest::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:inference.BatchInferenceRequest)
-  for (;;) {
-    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+const char* BatchInferenceRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
       // repeated .inference.PositionTensor positions = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
-                input, add_positions()));
-        } else {
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_positions(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
           goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormat::SkipField(
-              input, tag, _internal_metadata_.mutable_unknown_fields()));
-        break;
-      }
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
     }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:inference.BatchInferenceRequest)
-  return true;
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
 failure:
-  // @@protoc_insertion_point(parse_failure:inference.BatchInferenceRequest)
-  return false;
-#undef DO_
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
 }
 
-void BatchInferenceRequest::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:inference.BatchInferenceRequest)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // repeated .inference.PositionTensor positions = 1;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->positions_size()); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      1,
-      this->positions(static_cast<int>(i)),
-      output);
-  }
-
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
-  }
-  // @@protoc_insertion_point(serialize_end:inference.BatchInferenceRequest)
-}
-
-::google::protobuf::uint8* BatchInferenceRequest::InternalSerializeWithCachedSizesToArray(
-    bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
+uint8_t* BatchInferenceRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:inference.BatchInferenceRequest)
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // repeated .inference.PositionTensor positions = 1;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->positions_size()); i < n; i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessageToArray(
-        1, this->positions(static_cast<int>(i)), deterministic, target);
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_positions_size()); i < n; i++) {
+    const auto& repfield = this->_internal_positions(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
   }
 
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:inference.BatchInferenceRequest)
   return target;
@@ -600,57 +466,37 @@ size_t BatchInferenceRequest::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:inference.BatchInferenceRequest)
   size_t total_size = 0;
 
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
-  }
-  // repeated .inference.PositionTensor positions = 1;
-  {
-    unsigned int count = static_cast<unsigned int>(this->positions_size());
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          this->positions(static_cast<int>(i)));
-    }
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
-}
-
-void BatchInferenceRequest::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:inference.BatchInferenceRequest)
-  GOOGLE_DCHECK_NE(&from, this);
-  const BatchInferenceRequest* source =
-      ::google::protobuf::internal::DynamicCastToGenerated<const BatchInferenceRequest>(
-          &from);
-  if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:inference.BatchInferenceRequest)
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:inference.BatchInferenceRequest)
-    MergeFrom(*source);
-  }
-}
-
-void BatchInferenceRequest::MergeFrom(const BatchInferenceRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:inference.BatchInferenceRequest)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  positions_.MergeFrom(from.positions_);
+  // repeated .inference.PositionTensor positions = 1;
+  total_size += 1UL * this->_internal_positions_size();
+  for (const auto& msg : this->_impl_.positions_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-void BatchInferenceRequest::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:inference.BatchInferenceRequest)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData BatchInferenceRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    BatchInferenceRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*BatchInferenceRequest::GetClassData() const { return &_class_data_; }
+
+
+void BatchInferenceRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<BatchInferenceRequest*>(&to_msg);
+  auto& from = static_cast<const BatchInferenceRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:inference.BatchInferenceRequest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.positions_.MergeFrom(from._impl_.positions_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void BatchInferenceRequest::CopyFrom(const BatchInferenceRequest& from) {
@@ -664,202 +510,155 @@ bool BatchInferenceRequest::IsInitialized() const {
   return true;
 }
 
-void BatchInferenceRequest::Swap(BatchInferenceRequest* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
 void BatchInferenceRequest::InternalSwap(BatchInferenceRequest* other) {
   using std::swap;
-  CastToBase(&positions_)->InternalSwap(CastToBase(&other->positions_));
-  _internal_metadata_.Swap(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.positions_.InternalSwap(&other->_impl_.positions_);
 }
 
-::google::protobuf::Metadata BatchInferenceRequest::GetMetadata() const {
-  protobuf_inference_2eproto::protobuf_AssignDescriptorsOnce();
-  return ::protobuf_inference_2eproto::file_level_metadata[kIndexInFileMessages];
+::PROTOBUF_NAMESPACE_ID::Metadata BatchInferenceRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_inference_2eproto_getter, &descriptor_table_inference_2eproto_once,
+      file_level_metadata_inference_2eproto[1]);
 }
-
 
 // ===================================================================
 
-void EvaluationResult::InitAsDefaultInstance() {
-}
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int EvaluationResult::kPolicyLogitsFieldNumber;
-const int EvaluationResult::kValueFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+class EvaluationResult::_Internal {
+ public:
+};
 
-EvaluationResult::EvaluationResult()
-  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  ::google::protobuf::internal::InitSCC(
-      &protobuf_inference_2eproto::scc_info_EvaluationResult.base);
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:inference.EvaluationResult)
+EvaluationResult::EvaluationResult(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:inference.EvaluationResult)
 }
 EvaluationResult::EvaluationResult(const EvaluationResult& from)
-  : ::google::protobuf::Message(),
-      _internal_metadata_(NULL),
-      policy_logits_(from.policy_logits_) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  value_ = from.value_;
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  EvaluationResult* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.policy_logits_){from._impl_.policy_logits_}
+    , decltype(_impl_.value_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.value_ = from._impl_.value_;
   // @@protoc_insertion_point(copy_constructor:inference.EvaluationResult)
 }
 
-void EvaluationResult::SharedCtor() {
-  value_ = 0;
+inline void EvaluationResult::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.policy_logits_){arena}
+    , decltype(_impl_.value_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 EvaluationResult::~EvaluationResult() {
   // @@protoc_insertion_point(destructor:inference.EvaluationResult)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
 }
 
-void EvaluationResult::SharedDtor() {
+inline void EvaluationResult::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.policy_logits_.~RepeatedField();
 }
 
 void EvaluationResult::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
-const ::google::protobuf::Descriptor* EvaluationResult::descriptor() {
-  ::protobuf_inference_2eproto::protobuf_AssignDescriptorsOnce();
-  return ::protobuf_inference_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
-}
-
-const EvaluationResult& EvaluationResult::default_instance() {
-  ::google::protobuf::internal::InitSCC(&protobuf_inference_2eproto::scc_info_EvaluationResult.base);
-  return *internal_default_instance();
-}
-
 
 void EvaluationResult::Clear() {
 // @@protoc_insertion_point(message_clear_start:inference.EvaluationResult)
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  policy_logits_.Clear();
-  value_ = 0;
-  _internal_metadata_.Clear();
+  _impl_.policy_logits_.Clear();
+  _impl_.value_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-bool EvaluationResult::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:inference.EvaluationResult)
-  for (;;) {
-    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+const char* EvaluationResult::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
       // repeated float policy_logits = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 input, this->mutable_policy_logits())));
-        } else if (
-            static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(13u /* 13 & 0xFF */)) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 1, 10u, input, this->mutable_policy_logits())));
-        } else {
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedFloatParser(_internal_mutable_policy_logits(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 13) {
+          _internal_add_policy_logits(::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr));
+          ptr += sizeof(float);
+        } else
           goto handle_unusual;
-        }
-        break;
-      }
-
+        continue;
       // float value = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(21u /* 21 & 0xFF */)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 input, &value_)));
-        } else {
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 21)) {
+          _impl_.value_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
           goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormat::SkipField(
-              input, tag, _internal_metadata_.mutable_unknown_fields()));
-        break;
-      }
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
     }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:inference.EvaluationResult)
-  return true;
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
 failure:
-  // @@protoc_insertion_point(parse_failure:inference.EvaluationResult)
-  return false;
-#undef DO_
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
 }
 
-void EvaluationResult::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:inference.EvaluationResult)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // repeated float policy_logits = 1;
-  if (this->policy_logits_size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteTag(1, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
-    output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
-        _policy_logits_cached_byte_size_));
-    ::google::protobuf::internal::WireFormatLite::WriteFloatArray(
-      this->policy_logits().data(), this->policy_logits_size(), output);
-  }
-
-  // float value = 2;
-  if (this->value() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->value(), output);
-  }
-
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
-  }
-  // @@protoc_insertion_point(serialize_end:inference.EvaluationResult)
-}
-
-::google::protobuf::uint8* EvaluationResult::InternalSerializeWithCachedSizesToArray(
-    bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
+uint8_t* EvaluationResult::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:inference.EvaluationResult)
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // repeated float policy_logits = 1;
-  if (this->policy_logits_size() > 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
-      1,
-      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
-      target);
-    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
-        static_cast< ::google::protobuf::int32>(
-            _policy_logits_cached_byte_size_), target);
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteFloatNoTagToArray(this->policy_logits_, target);
+  if (this->_internal_policy_logits_size() > 0) {
+    target = stream->WriteFixedPacked(1, _internal_policy_logits(), target);
   }
 
   // float value = 2;
-  if (this->value() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->value(), target);
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_value = this->_internal_value();
+  uint32_t raw_value;
+  memcpy(&raw_value, &tmp_value, sizeof(tmp_value));
+  if (raw_value != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteFloatToArray(2, this->_internal_value(), target);
   }
 
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:inference.EvaluationResult)
   return target;
@@ -869,70 +668,57 @@ size_t EvaluationResult::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:inference.EvaluationResult)
   size_t total_size = 0;
 
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
-  }
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
   // repeated float policy_logits = 1;
   {
-    unsigned int count = static_cast<unsigned int>(this->policy_logits_size());
+    unsigned int count = static_cast<unsigned int>(this->_internal_policy_logits_size());
     size_t data_size = 4UL * count;
     if (data_size > 0) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-            static_cast< ::google::protobuf::int32>(data_size));
+        ::_pbi::WireFormatLite::Int32Size(static_cast<int32_t>(data_size));
     }
-    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
-    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-    _policy_logits_cached_byte_size_ = cached_size;
-    GOOGLE_SAFE_CONCURRENT_WRITES_END();
     total_size += data_size;
   }
 
   // float value = 2;
-  if (this->value() != 0) {
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_value = this->_internal_value();
+  uint32_t raw_value;
+  memcpy(&raw_value, &tmp_value, sizeof(tmp_value));
+  if (raw_value != 0) {
     total_size += 1 + 4;
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-void EvaluationResult::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:inference.EvaluationResult)
-  GOOGLE_DCHECK_NE(&from, this);
-  const EvaluationResult* source =
-      ::google::protobuf::internal::DynamicCastToGenerated<const EvaluationResult>(
-          &from);
-  if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:inference.EvaluationResult)
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:inference.EvaluationResult)
-    MergeFrom(*source);
-  }
-}
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData EvaluationResult::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    EvaluationResult::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*EvaluationResult::GetClassData() const { return &_class_data_; }
 
-void EvaluationResult::MergeFrom(const EvaluationResult& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:inference.EvaluationResult)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
+
+void EvaluationResult::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<EvaluationResult*>(&to_msg);
+  auto& from = static_cast<const EvaluationResult&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:inference.EvaluationResult)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  policy_logits_.MergeFrom(from.policy_logits_);
-  if (from.value() != 0) {
-    set_value(from.value());
+  _this->_impl_.policy_logits_.MergeFrom(from._impl_.policy_logits_);
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_value = from._internal_value();
+  uint32_t raw_value;
+  memcpy(&raw_value, &tmp_value, sizeof(tmp_value));
+  if (raw_value != 0) {
+    _this->_internal_set_value(from._internal_value());
   }
-}
-
-void EvaluationResult::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:inference.EvaluationResult)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void EvaluationResult::CopyFrom(const EvaluationResult& from) {
@@ -946,163 +732,139 @@ bool EvaluationResult::IsInitialized() const {
   return true;
 }
 
-void EvaluationResult::Swap(EvaluationResult* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
 void EvaluationResult::InternalSwap(EvaluationResult* other) {
   using std::swap;
-  policy_logits_.InternalSwap(&other->policy_logits_);
-  swap(value_, other->value_);
-  _internal_metadata_.Swap(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.policy_logits_.InternalSwap(&other->_impl_.policy_logits_);
+  swap(_impl_.value_, other->_impl_.value_);
 }
 
-::google::protobuf::Metadata EvaluationResult::GetMetadata() const {
-  protobuf_inference_2eproto::protobuf_AssignDescriptorsOnce();
-  return ::protobuf_inference_2eproto::file_level_metadata[kIndexInFileMessages];
+::PROTOBUF_NAMESPACE_ID::Metadata EvaluationResult::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_inference_2eproto_getter, &descriptor_table_inference_2eproto_once,
+      file_level_metadata_inference_2eproto[2]);
 }
-
 
 // ===================================================================
 
-void BatchInferenceResponse::InitAsDefaultInstance() {
-}
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int BatchInferenceResponse::kEvaluationsFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+class BatchInferenceResponse::_Internal {
+ public:
+};
 
-BatchInferenceResponse::BatchInferenceResponse()
-  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  ::google::protobuf::internal::InitSCC(
-      &protobuf_inference_2eproto::scc_info_BatchInferenceResponse.base);
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:inference.BatchInferenceResponse)
+BatchInferenceResponse::BatchInferenceResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:inference.BatchInferenceResponse)
 }
 BatchInferenceResponse::BatchInferenceResponse(const BatchInferenceResponse& from)
-  : ::google::protobuf::Message(),
-      _internal_metadata_(NULL),
-      evaluations_(from.evaluations_) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  BatchInferenceResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.evaluations_){from._impl_.evaluations_}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:inference.BatchInferenceResponse)
 }
 
-void BatchInferenceResponse::SharedCtor() {
+inline void BatchInferenceResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.evaluations_){arena}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
 }
 
 BatchInferenceResponse::~BatchInferenceResponse() {
   // @@protoc_insertion_point(destructor:inference.BatchInferenceResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
   SharedDtor();
 }
 
-void BatchInferenceResponse::SharedDtor() {
+inline void BatchInferenceResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.evaluations_.~RepeatedPtrField();
 }
 
 void BatchInferenceResponse::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
+  _impl_._cached_size_.Set(size);
 }
-const ::google::protobuf::Descriptor* BatchInferenceResponse::descriptor() {
-  ::protobuf_inference_2eproto::protobuf_AssignDescriptorsOnce();
-  return ::protobuf_inference_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
-}
-
-const BatchInferenceResponse& BatchInferenceResponse::default_instance() {
-  ::google::protobuf::internal::InitSCC(&protobuf_inference_2eproto::scc_info_BatchInferenceResponse.base);
-  return *internal_default_instance();
-}
-
 
 void BatchInferenceResponse::Clear() {
 // @@protoc_insertion_point(message_clear_start:inference.BatchInferenceResponse)
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  evaluations_.Clear();
-  _internal_metadata_.Clear();
+  _impl_.evaluations_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-bool BatchInferenceResponse::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:inference.BatchInferenceResponse)
-  for (;;) {
-    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+const char* BatchInferenceResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
       // repeated .inference.EvaluationResult evaluations = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
-                input, add_evaluations()));
-        } else {
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_evaluations(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
           goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormat::SkipField(
-              input, tag, _internal_metadata_.mutable_unknown_fields()));
-        break;
-      }
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
     }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:inference.BatchInferenceResponse)
-  return true;
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
 failure:
-  // @@protoc_insertion_point(parse_failure:inference.BatchInferenceResponse)
-  return false;
-#undef DO_
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
 }
 
-void BatchInferenceResponse::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:inference.BatchInferenceResponse)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // repeated .inference.EvaluationResult evaluations = 1;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->evaluations_size()); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      1,
-      this->evaluations(static_cast<int>(i)),
-      output);
-  }
-
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
-  }
-  // @@protoc_insertion_point(serialize_end:inference.BatchInferenceResponse)
-}
-
-::google::protobuf::uint8* BatchInferenceResponse::InternalSerializeWithCachedSizesToArray(
-    bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
+uint8_t* BatchInferenceResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
   // @@protoc_insertion_point(serialize_to_array_start:inference.BatchInferenceResponse)
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
   // repeated .inference.EvaluationResult evaluations = 1;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->evaluations_size()); i < n; i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessageToArray(
-        1, this->evaluations(static_cast<int>(i)), deterministic, target);
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_evaluations_size()); i < n; i++) {
+    const auto& repfield = this->_internal_evaluations(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
   }
 
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
   // @@protoc_insertion_point(serialize_to_array_end:inference.BatchInferenceResponse)
   return target;
@@ -1112,57 +874,37 @@ size_t BatchInferenceResponse::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:inference.BatchInferenceResponse)
   size_t total_size = 0;
 
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
-  }
-  // repeated .inference.EvaluationResult evaluations = 1;
-  {
-    unsigned int count = static_cast<unsigned int>(this->evaluations_size());
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          this->evaluations(static_cast<int>(i)));
-    }
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
-}
-
-void BatchInferenceResponse::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:inference.BatchInferenceResponse)
-  GOOGLE_DCHECK_NE(&from, this);
-  const BatchInferenceResponse* source =
-      ::google::protobuf::internal::DynamicCastToGenerated<const BatchInferenceResponse>(
-          &from);
-  if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:inference.BatchInferenceResponse)
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:inference.BatchInferenceResponse)
-    MergeFrom(*source);
-  }
-}
-
-void BatchInferenceResponse::MergeFrom(const BatchInferenceResponse& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:inference.BatchInferenceResponse)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  evaluations_.MergeFrom(from.evaluations_);
+  // repeated .inference.EvaluationResult evaluations = 1;
+  total_size += 1UL * this->_internal_evaluations_size();
+  for (const auto& msg : this->_impl_.evaluations_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-void BatchInferenceResponse::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:inference.BatchInferenceResponse)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData BatchInferenceResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    BatchInferenceResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*BatchInferenceResponse::GetClassData() const { return &_class_data_; }
+
+
+void BatchInferenceResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<BatchInferenceResponse*>(&to_msg);
+  auto& from = static_cast<const BatchInferenceResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:inference.BatchInferenceResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.evaluations_.MergeFrom(from._impl_.evaluations_);
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
 void BatchInferenceResponse::CopyFrom(const BatchInferenceResponse& from) {
@@ -1176,39 +918,38 @@ bool BatchInferenceResponse::IsInitialized() const {
   return true;
 }
 
-void BatchInferenceResponse::Swap(BatchInferenceResponse* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
 void BatchInferenceResponse::InternalSwap(BatchInferenceResponse* other) {
   using std::swap;
-  CastToBase(&evaluations_)->InternalSwap(CastToBase(&other->evaluations_));
-  _internal_metadata_.Swap(&other->_internal_metadata_);
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.evaluations_.InternalSwap(&other->_impl_.evaluations_);
 }
 
-::google::protobuf::Metadata BatchInferenceResponse::GetMetadata() const {
-  protobuf_inference_2eproto::protobuf_AssignDescriptorsOnce();
-  return ::protobuf_inference_2eproto::file_level_metadata[kIndexInFileMessages];
+::PROTOBUF_NAMESPACE_ID::Metadata BatchInferenceResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_inference_2eproto_getter, &descriptor_table_inference_2eproto_once,
+      file_level_metadata_inference_2eproto[3]);
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace inference
-namespace google {
-namespace protobuf {
-template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::inference::PositionTensor* Arena::CreateMaybeMessage< ::inference::PositionTensor >(Arena* arena) {
-  return Arena::CreateInternal< ::inference::PositionTensor >(arena);
+PROTOBUF_NAMESPACE_OPEN
+template<> PROTOBUF_NOINLINE ::inference::PositionTensor*
+Arena::CreateMaybeMessage< ::inference::PositionTensor >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::inference::PositionTensor >(arena);
 }
-template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::inference::BatchInferenceRequest* Arena::CreateMaybeMessage< ::inference::BatchInferenceRequest >(Arena* arena) {
-  return Arena::CreateInternal< ::inference::BatchInferenceRequest >(arena);
+template<> PROTOBUF_NOINLINE ::inference::BatchInferenceRequest*
+Arena::CreateMaybeMessage< ::inference::BatchInferenceRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::inference::BatchInferenceRequest >(arena);
 }
-template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::inference::EvaluationResult* Arena::CreateMaybeMessage< ::inference::EvaluationResult >(Arena* arena) {
-  return Arena::CreateInternal< ::inference::EvaluationResult >(arena);
+template<> PROTOBUF_NOINLINE ::inference::EvaluationResult*
+Arena::CreateMaybeMessage< ::inference::EvaluationResult >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::inference::EvaluationResult >(arena);
 }
-template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::inference::BatchInferenceResponse* Arena::CreateMaybeMessage< ::inference::BatchInferenceResponse >(Arena* arena) {
-  return Arena::CreateInternal< ::inference::BatchInferenceResponse >(arena);
+template<> PROTOBUF_NOINLINE ::inference::BatchInferenceResponse*
+Arena::CreateMaybeMessage< ::inference::BatchInferenceResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::inference::BatchInferenceResponse >(arena);
 }
-}  // namespace protobuf
-}  // namespace google
+PROTOBUF_NAMESPACE_CLOSE
 
 // @@protoc_insertion_point(global_scope)
+#include <google/protobuf/port_undef.inc>
